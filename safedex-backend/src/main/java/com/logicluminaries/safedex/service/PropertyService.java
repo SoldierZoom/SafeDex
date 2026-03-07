@@ -13,15 +13,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PropertyService {
     private final PropertyRepository propertyRepository;
+    private static final int ITEMS_PER_PAGE = 2;//wil obviously increase later
 
     //adds entry
     public Property save(Property property) {
         return propertyRepository.save(property);
     }
 
-    //gets all entries
-    public List<Property> getAll() {
-        return propertyRepository.findAll();
+    //gets page of entries
+    public List<Property> getPage(int pageNum) {
+        List<Property> all = propertyRepository.findAll();//gets all entries
+
+        int start = (pageNum - 1) * ITEMS_PER_PAGE;
+        int end = Math.min(start + ITEMS_PER_PAGE, all.size());
+
+        List<Property> page = all.subList(start, end);
+        return page;
     }
 
     //gets specific entry by id

@@ -20,8 +20,8 @@ public class PropertyController {
     }
     //will add functionality for pages later
     @GetMapping
-    public List<Property> getProperties() {
-        return propertyService.getAll();
+    public List<Property> getProperties(@RequestParam(defaultValue = "1") int page) {
+        return propertyService.getPage(page);
     }
 
     @GetMapping("/{id}")
