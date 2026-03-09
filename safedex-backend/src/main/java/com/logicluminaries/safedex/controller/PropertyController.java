@@ -18,7 +18,7 @@ public class PropertyController {
     Property addProperty(@RequestBody Property property) {
         return propertyService.save(property);
     }
-    //will add functionality for pages later
+    //gets page of properties
     @GetMapping
     public List<Property> getProperties(@RequestParam(defaultValue = "1") int page) {
         return propertyService.getPage(page);
