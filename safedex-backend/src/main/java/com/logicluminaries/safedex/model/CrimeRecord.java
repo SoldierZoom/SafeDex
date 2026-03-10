@@ -12,8 +12,8 @@ public class CrimeRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String type;
+    private String type;//type of crime
     private double latitude;
     private double longitude;
-    private String location;
+    private String location;//most recorded crimes specify near street x, near hospital,etc...
 }
