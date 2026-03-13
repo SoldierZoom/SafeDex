@@ -31,7 +31,7 @@ public class NeighbourhoodController {
         return neighbourhoodService.getById(id);
     }
 
-    //
+    //gets page of recent crimes from specified neighbourhood id
     @GetMapping("/{id}/recentCrimes")
     List<CrimeRecord> getRecentCrimes(@PathVariable Long id,@RequestParam(defaultValue = "1") int page) {
         return neighbourhoodService.getRecentCrimesPage(id,page);

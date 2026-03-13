@@ -52,8 +52,10 @@ public class NeighbourhoodService {
         );
         Map<String, Object> details = restTemplate.getForObject(detailsUrl, Map.class);
         // this may include population
-        String popStr = (String) details.getOrDefault("population", "0");
-        int population = Integer.parseInt(popStr);
+        int population = Integer.parseInt((String) details.get("population"));
+        if(population!=0) {
+            neighbourhood.setPopulation(population);//only replaces estimated population if police db has one
+        }
         Thread.sleep(500);
 
         //gets lat and long pairs to build custom area
@@ -146,7 +148,7 @@ public class NeighbourhoodService {
         return neighbourhood;
     }
 
-    private int calcSafetyScore(Map<String, Integer> crimeTotals) {
+    private int calcSafetyScore(Map<String, Integer> crimeTotals,int population) {
         //set up crime weights
         Map<String, Integer> crimeWeights = new HashMap<>();
         crimeWeights.put("anti-social-behaviour", 1);
@@ -168,16 +170,15 @@ public class NeighbourhoodService {
 
         crimeWeights.put("violent-crime", 5);
         //calc code
-        int totalCrimes=0, weightTotal=0;
+        int weightTotal=0;
         for(Map.Entry<String, Integer> entry : crimeTotals.entrySet()) {
             String category = entry.getKey();
             int count = entry.getValue();
-            totalCrimes+=count;
             weightTotal+=count*crimeWeights.get(category);
         }
-        //may alter equation but since it prototype not too important
-        double severity = (double) weightTotal/totalCrimes;
-        double score = 100 - (severity * Math.log(totalCrimes+1) * 10);
+        //may rework later but good enough
+        double crimeRate = (double) weightTotal/population*1000;//crimes per 1k ppl
+        double score = 100 / (1 + crimeRate/400);
         int safetyScore = (int) Math.round(score);
         //make sure score in bounds
         safetyScore = Math.max(safetyScore, 0);
@@ -191,7 +192,7 @@ public class NeighbourhoodService {
         //and gets population, recentCrimes and crimeTotalByType
         Neighbourhood updatedNeighbourhood = getCrimeData(neighbourhood);
         //works out safety score using data in crimeTotalByType
-        updatedNeighbourhood.setSafetyScore(calcSafetyScore(updatedNeighbourhood.getCrimeTotalsByType()));
+        updatedNeighbourhood.setSafetyScore(calcSafetyScore(updatedNeighbourhood.getCrimeTotalsByType(),updatedNeighbourhood.getPopulation()));
         //saves in db
         return neighbourhoodRepository.save(updatedNeighbourhood);
     }
