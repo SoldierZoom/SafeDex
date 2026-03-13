@@ -3,7 +3,9 @@ package com.logicluminaries.safedex.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -13,4 +15,17 @@ public class Neighbourhood {
     private Long id;
     private String name;
     private int safetyScore;//from 1-100
+    private double latitude;//may change to array later to make sure whole area covered
+    private double longitude;
+    private int population;//estimated population
+
+    @ElementCollection
+    @CollectionTable(name = "neighbourhood_crime_totals", joinColumns = @JoinColumn(name = "neighbourhood_id"))
+    @MapKeyColumn(name = "category")
+    @Column(name = "total")
+    private Map<String, Integer> crimeTotalsByType = new HashMap<>();//stores total of each crime in the previous year by type in a map
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "neighbourhood_id")//creates foreign key in crimeRecord
+    private List<CrimeRecord> recentCrimes;//stores most recent month of crimes
 }

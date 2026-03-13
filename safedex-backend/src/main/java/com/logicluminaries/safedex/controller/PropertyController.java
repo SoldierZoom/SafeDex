@@ -13,17 +13,18 @@ import java.util.List;
 public class PropertyController {
     private final PropertyService propertyService;
 
-    //adds property to db, using for testing so may delete later
+    //adds property to db
     @PostMapping
     Property addProperty(@RequestBody Property property) {
         return propertyService.save(property);
     }
-    //will add functionality for pages later
+    //gets page of properties
     @GetMapping
     public List<Property> getProperties(@RequestParam(defaultValue = "1") int page) {
         return propertyService.getPage(page);
     }
 
+    //gets specific property with its unique id
     @GetMapping("/{id}")
     public Property getPropertyById(@PathVariable Long id) {
         return propertyService.getById(id);
