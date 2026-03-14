@@ -12,8 +12,3 @@ export function getNeighbourhoodById(id) {
     let url = Api.buildApiUrl(`${basePath}/${encodeURIComponent(id)}`);
     return Api.getData(url);
 }
-
-export function addNeighbourhood(formData) {
-    let url = Api.buildApiUrl(`${basePath}`);
-    return Api.putData(url, formData);
-}
