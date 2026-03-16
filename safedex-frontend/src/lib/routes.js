@@ -3,11 +3,14 @@ import {
     ListingsPage,
     FavouritePage,
     HeatmapPage,
+    SafetyScorePage,
 } from '../pages';
 
 import {
     Home,
     Heart,
+    List,
+    Map,
 } from 'lucide-react';
 
 const routes = [
@@ -21,7 +24,7 @@ const routes = [
         name: 'Listings',
         path: '/listings',
         component: <ListingsPage />,
-        icon: null,
+        icon: <List className="inline text-slate-700" />,
     },
     {
         name: 'Favourite',
@@ -33,8 +36,14 @@ const routes = [
         name: 'Crime Heatmap',
         path: '/heatmap',
         component: <HeatmapPage />,
-        icon: null,
+        icon: <Map className="inline text-slate-700" />,
     },
+    {
+        name: 'Safety Score',
+        path: '/listings/:id/safety',
+        component: <SafetyScorePage />,
+        icon: null,
+    }
 ];
 
 export default routes;

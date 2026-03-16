@@ -14,7 +14,7 @@ export default function NavBar() {
 
     return (
         <nav className="fixed min-w-full max-h-13 p-1 flex justify-center space-x-6 bg-blue-100">
-            {routes.map(({ name, path, icon }) => (
+            {routes.filter(({ icon }) => icon !== null).map(({ name, path, icon }) => (
                 <div
                     key={path}
                     className={`m-1 p-1 px-3 rounded-xl duration-300 ${(isInPath(path)? "bg-blue-400/50" : "")}`}
