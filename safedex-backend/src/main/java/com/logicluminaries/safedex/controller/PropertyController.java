@@ -21,8 +21,16 @@ public class PropertyController {
     }
     //gets page of properties
     @GetMapping
-    public List<Property> getProperties(@RequestParam(defaultValue = "1") int page) {
-        return propertyService.getPage(page);
+    public List<Property> getProperties(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) Integer minSafetyScore,
+            @RequestParam(defaultValue = "ppm") String sortBy,
+            @RequestParam(defaultValue = "asc") String order
+    ) {
+        return propertyService.getPage(page,query,minPrice,maxPrice,minSafetyScore,sortBy,order);
     }
 
     //gets specific property with its unique id
