@@ -41,7 +41,7 @@ public class PropertyController {
             @RequestParam(required = false) Integer minBathrooms,
             @RequestParam(required = false) Integer maxBathrooms,
             @RequestParam(required = false) List<HouseType> types,
-            @RequestParam(defaultValue = "ppm") String sortBy,
+            @RequestParam(defaultValue = "price") String sortBy,
             @RequestParam(defaultValue = "ASC") OrderType order
     ) {
         return propertyService.getPage(page,query,minPrice,maxPrice,minSafetyScore,minBedrooms,maxBedrooms,minBathrooms,maxBathrooms,types,sortBy,order);

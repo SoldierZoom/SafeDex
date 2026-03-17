@@ -20,21 +20,31 @@ public class PropertyService {
 
     //adds entry
     public Property save(Property property) {
+        if(property.getNeighbourhood()==null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neighbourhood is null");
+        }
         return propertyRepository.save(property);
     }
     //adds list of entries
     public List<Property> saveAll(List<Property> properties) {
+        for(Property property : properties) {
+            if(property.getNeighbourhood()==null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neighbourhood is null");
+            }
+        }
         return propertyRepository.saveAll(properties);
     }
 
     //gets page of filtered entries
     public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
-        //adjust sortBy cause safetyScore in neighbourhood table
+        //adjust sortBy fields
         String actualSortField;
         if (sortBy.equals("safetyScore")) {
             actualSortField = "neighbourhood.safetyScore";
+        } else if (sortBy.equals("date")) {
+            actualSortField = "id";
         } else {
-            actualSortField = sortBy;
+            actualSortField = "ppm";
         }
 
         //make sort

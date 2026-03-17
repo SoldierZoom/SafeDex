@@ -2,10 +2,7 @@ package com.logicluminaries.safedex.model;
 
 import com.logicluminaries.safedex.enums.HouseType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 
@@ -37,6 +34,13 @@ public class Property {
     @NotNull
     @Min(1)
     private Integer bathrooms;
+
+    private String description;//property description (not required)
+
+    @NotBlank
+    private String phoneNumber;
+
+    private String email;
 
     @NotNull
     @ManyToOne
