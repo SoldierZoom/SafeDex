@@ -1,4 +1,5 @@
 // import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 // Mock data - replace with real API call
 const mockProperty = {
@@ -93,6 +94,78 @@ export default function SafetyScorePage() {
                     })}
                 </div>
             </div>
+
+            {/* Pie chart */}
+            <div className="rounded-x1 border border-slate-200 p-6 mb-6">
+                <h2 className="text-base font-semibold text-slate-700 mb-4">Crime distribution - past 12 months</h2>
+                <PieChart categories={property.crime_stats.categories} total={total} />
+            </div>
+
         </div>
-    )
+    );
+}
+
+function PieChart({ categories, total }) {
+    const [hovered, setHovered] = useState(null);
+    let cAngle = -Math.PI / 2;
+    const cx = 100, cy = 100, r = 80;
+
+    const slices = categories.map((cat) => {
+        const angle = (cat.count / total) * 2 * Math.PI;
+        const start = cAngle;
+        cAngle += angle;
+        const end = cAngle;
+        const x1 = cx + r * Math.cos(start);
+        const y1 = cy + r * Math.sin(start);
+        const x2 = cx + r * Math.cos(end);
+        const y2 = cy + r * Math.sin(end);
+        const large = angle > Math.PI ? 1 : 0;
+        return { ...cat, path: `M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2}Z`, midAngle: start + angle / 2};
+    });
+
+    // const active = hovered !== null ? categories[hovered] : null;
+
+    return (
+        <div className="flex flex-col sm:flex-row items-center gap-6">
+            {/* Pie */}
+            <div className="text-center mb-2">
+                <p className="text-sm">Total</p>
+                <p className="text-lg font-semibold">{total}</p>
+            </div>
+            <svg viewBox="0 0 200 200" width={200} height={200} style={{ flexShrink: 0 }}>
+                {slices.map((s, i) => (
+                    <path
+                        key={s.label}
+                        d={s.path}
+                        fill={s.color}
+                        stroke="white"
+                        strokeWidth={2}
+                        opacity={hovered === null || hovered === i ? 1 : 0.4}
+                        style={{ cursor: 'pointer', transition: 'opacity 0.2s' }}
+                        onMouseEnter={() => setHovered(i)}
+                        onMouseLeave={() => setHovered(null)}
+                    />    
+                ))}
+            </svg>
+
+            {/* Legend */}
+            <div className="flex flex-col gap-2 w-full">
+                {categories.map((cat, i) => {
+                    const pct = Math.round((cat.count / total) * 100);
+                    return (
+                        <div
+                            key={cat.label}
+                            className="flex items-center gap-2 text-sm cursor-pointer" style={{ opacity: hovered === null || hovered === i ? 1 : 0.4, transition: 'opacity 0.2s' }}
+                            onMouseEnter={() => setHovered(i)}
+                            onMouseLeave={() => setHovered(null)}
+                        >
+                            <span style={{ width: 10, height: 10, borderRadius: 2, background: cat.color, flexShrink: 0}} />
+                            <span className="flex-1">{cat.label}</span>
+                            <span className="">{pct}%</span>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
 }
