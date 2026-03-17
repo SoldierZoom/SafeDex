@@ -3,6 +3,7 @@ import {
     ListingsPage,
     FavouritePage,
     HeatmapPage,
+    IndividualListingPage,
 } from '../pages';
 
 import {
@@ -33,6 +34,12 @@ const routes = [
         name: 'Crime Heatmap',
         path: '/heatmap',
         component: <HeatmapPage />,
+        icon: null,
+    },
+    {
+        name: null,
+        path: '/listings/:id',
+        component: <IndividualListingPage />,
         icon: null,
     },
 ];
