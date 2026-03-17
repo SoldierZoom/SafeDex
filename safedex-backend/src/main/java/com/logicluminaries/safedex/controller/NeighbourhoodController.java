@@ -1,6 +1,5 @@
 package com.logicluminaries.safedex.controller;
 
-import com.logicluminaries.safedex.model.CrimeRecord;
 import com.logicluminaries.safedex.model.Neighbourhood;
 import com.logicluminaries.safedex.service.NeighbourhoodService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,13 @@ public class NeighbourhoodController {
     Neighbourhood addNeighbourhood(@RequestBody Neighbourhood neighbourhood) throws InterruptedException {
         return neighbourhoodService.addNeighbourhood(neighbourhood);
     }
-    //gets all neighbourhoods in db, for testing so may remove
+    @PostMapping("/bulk")
+    //add list of neighbourhoods for ease of use
+    List<Neighbourhood> addNeighbourhoods(@RequestBody List<Neighbourhood> neighbourhoods) throws InterruptedException {
+        return neighbourhoodService.addNeighbourhoods(neighbourhoods);
+    }
+
+    //gets all neighbourhoods in db
     @GetMapping
     List<Neighbourhood> getAllNeighbourhoods() {
         return neighbourhoodService.getAll();
@@ -31,11 +36,4 @@ public class NeighbourhoodController {
     Neighbourhood getNeighbourhoodById(@PathVariable Long id) {
         return neighbourhoodService.getById(id);
     }
-
-    //gets page of recent crimes from specified neighbourhood id
-    @GetMapping("/{id}/recentCrimes")
-    List<CrimeRecord> getRecentCrimes(@PathVariable Long id,@RequestParam(defaultValue = "1") int page) {
-        return neighbourhoodService.getRecentCrimesPage(id,page);
-    }
-
 }

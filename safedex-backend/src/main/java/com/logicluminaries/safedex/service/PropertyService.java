@@ -1,5 +1,7 @@
 package com.logicluminaries.safedex.service;
 
+import com.logicluminaries.safedex.enums.HouseType;
+import com.logicluminaries.safedex.enums.OrderType;
 import com.logicluminaries.safedex.model.Property;
 import com.logicluminaries.safedex.repository.PropertyRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,16 @@ public class PropertyService {
     public Property save(Property property) {
         return propertyRepository.save(property);
     }
+    //adds list of entries
+    public List<Property> saveAll(List<Property> properties) {
+        return propertyRepository.saveAll(properties);
+    }
 
     //gets page of filtered entries
-    public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, String sortBy, String order) {
+    public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
         //adjust sortBy cause safetyScore in neighbourhood table
         String actualSortField;
-        if (sortBy.equals("safetyScore")) {
+        if (sortBy.equalsIgnoreCase("safetyScore")) {
             actualSortField = "neighbourhood.safetyScore";
         } else {
             actualSortField = sortBy;
@@ -33,7 +39,7 @@ public class PropertyService {
 
         //make sort
         Sort sort;
-        if (order.equalsIgnoreCase("desc")) {
+        if (order.toString().equals("DESC")) {
             sort = Sort.by(actualSortField).descending();
         } else {
             sort = Sort.by(actualSortField).ascending();
@@ -54,12 +60,39 @@ public class PropertyService {
             if(minSafetyScore != null && property.getNeighbourhood().getSafetyScore() < minSafetyScore) {
                 return true;
             }
-            //remove if query doesn't match name - may improve later
+            //remove if bedrooms out of range
+            Integer bedNum = property.getBedrooms();
+            if(minBedroom != null && bedNum < minBedroom) {
+                return true;
+            }
+            if(maxBedroom != null && bedNum > maxBedroom) {
+                return true;
+            }
+            //remove if bathrooms out of range
+            Integer bathNum = property.getBathrooms();
+            if(minBathroom != null && bathNum < minBathroom) {
+                return true;
+            }
+            if(maxBathroom != null && bathNum > maxBathroom) {
+                return true;
+            }
+            //remove if query doesn't match location
             if(query != null && !query.isEmpty()) {
-                if(!property.getName().toLowerCase().contains(query.toLowerCase())) {
+                String location = property.getRoad().concat(property.getNeighbourhood().getName()).concat(property.getPostcode());
+                String[] parts = query.split(" ");
+                for(String part : parts) {
+                    if(!location.toLowerCase().contains(part.toLowerCase())) {
+                        return true;
+                    }
+                }
+            }
+            //remove excluded house types
+            if(types != null && !types.isEmpty()) {
+                if(!types.contains(property.getType())) {
                     return true;
                 }
             }
+
             return false;
         });
         //get page

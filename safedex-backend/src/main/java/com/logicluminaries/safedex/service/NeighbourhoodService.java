@@ -196,8 +196,13 @@ public class NeighbourhoodService {
         //saves in db
         return neighbourhoodRepository.save(updatedNeighbourhood);
     }
-
-
+    public List<Neighbourhood> addNeighbourhoods(List<Neighbourhood> neighbourhoods) throws InterruptedException {
+        List<Neighbourhood> result = new ArrayList<>();
+        for(Neighbourhood neighbourhood : neighbourhoods) {
+            result.add(addNeighbourhood(neighbourhood));
+        }
+        return result;
+    }
 
 
     //gets all neighbourhoods in db
