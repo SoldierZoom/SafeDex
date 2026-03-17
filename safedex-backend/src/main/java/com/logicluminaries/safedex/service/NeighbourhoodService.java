@@ -43,8 +43,7 @@ public class NeighbourhoodService {
         String neighbourhoodId = locateResp.get("neighbourhood");
         String force = locateResp.get("force");//e.g. west midlands
         Thread.sleep(500);// so no rate limits
-
-        //used to get population of neighbourhood
+        //used to get population of neighbourhood and verify name of neighbourhood
         String detailsUrl = String.format(
                 "https://data.police.uk/api/%s/%s",
                 force,
@@ -55,6 +54,10 @@ public class NeighbourhoodService {
         int population = Integer.parseInt((String) details.get("population"));
         if(population!=0) {
             neighbourhood.setPopulation(population);//only replaces estimated population if police db has one
+        }
+        String name = (String) details.get("name");
+        if(!name.equals(neighbourhood.getName())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_CONTENT, "Neighbourhood name mismatch for latitude and longitude provided");
         }
         Thread.sleep(500);
 

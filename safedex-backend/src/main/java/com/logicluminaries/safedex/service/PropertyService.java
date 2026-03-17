@@ -31,7 +31,7 @@ public class PropertyService {
     public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
         //adjust sortBy cause safetyScore in neighbourhood table
         String actualSortField;
-        if (sortBy.equalsIgnoreCase("safetyScore")) {
+        if (sortBy.equals("safetyScore")) {
             actualSortField = "neighbourhood.safetyScore";
         } else {
             actualSortField = sortBy;

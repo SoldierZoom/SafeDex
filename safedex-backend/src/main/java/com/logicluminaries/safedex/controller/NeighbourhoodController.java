@@ -2,6 +2,7 @@ package com.logicluminaries.safedex.controller;
 
 import com.logicluminaries.safedex.model.Neighbourhood;
 import com.logicluminaries.safedex.service.NeighbourhoodService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +17,12 @@ public class NeighbourhoodController {
 
     //adds neighbourhood to db, for testing say may remove
     @PostMapping
-    Neighbourhood addNeighbourhood(@RequestBody Neighbourhood neighbourhood) throws InterruptedException {
+    Neighbourhood addNeighbourhood(@Valid @RequestBody Neighbourhood neighbourhood) throws InterruptedException {
         return neighbourhoodService.addNeighbourhood(neighbourhood);
     }
     @PostMapping("/bulk")
     //add list of neighbourhoods for ease of use
-    List<Neighbourhood> addNeighbourhoods(@RequestBody List<Neighbourhood> neighbourhoods) throws InterruptedException {
+    List<Neighbourhood> addNeighbourhoods(@Valid @RequestBody List<Neighbourhood> neighbourhoods) throws InterruptedException {
         return neighbourhoodService.addNeighbourhoods(neighbourhoods);
     }
 

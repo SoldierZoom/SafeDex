@@ -4,6 +4,7 @@ import com.logicluminaries.safedex.enums.HouseType;
 import com.logicluminaries.safedex.enums.OrderType;
 import com.logicluminaries.safedex.model.Property;
 import com.logicluminaries.safedex.service.PropertyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +19,12 @@ public class PropertyController {
 
     //adds property to db
     @PostMapping
-    Property addProperty(@RequestBody Property property) {
+    Property addProperty(@Valid @RequestBody Property property) {
         return propertyService.save(property);
     }
     //add list of properties to db
     @PostMapping("/bulk")
-    List<Property> addProperties(@RequestBody List<Property> properties) {
+    List<Property> addProperties(@Valid @RequestBody List<Property> properties) {
         return propertyService.saveAll(properties);
     }
 
