@@ -1,6 +1,9 @@
 package com.logicluminaries.safedex.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -13,10 +16,20 @@ public class Neighbourhood {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     private String name;
+
     private int safetyScore;//from 1-100
-    private double latitude;//may change to array later to make sure whole area covered
+
+    @NotNull
+    private double latitude;
+
+    @NotNull
     private double longitude;
+
+    @NotNull
+    @Positive
     private int population;//estimated population
 
     @ElementCollection
