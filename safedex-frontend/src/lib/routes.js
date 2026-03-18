@@ -40,7 +40,7 @@ const routes = [
     },
     {
         name: 'Safety Score',
-        path: '/listings/:id/safety',
+        path: '/neighbourhood/:id',
         component: <SafetyScorePage />,
         icon: null,
     }

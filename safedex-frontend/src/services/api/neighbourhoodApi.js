@@ -12,3 +12,8 @@ export function getNeighbourhoodById(id) {
     let url = Api.buildApiUrl(`${basePath}/${encodeURIComponent(id)}`);
     return Api.getData(url);
 }
+
+export function getRecentCrimes(id, page = 1) {
+    let url = Api.buildApiUrl(`${basePath}/${encodeURIComponent(id)}/recentCrimes?page=${page}`);
+    return Api.getData(url);
+}

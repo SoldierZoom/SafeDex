@@ -1,33 +1,41 @@
 // import { useParams } from 'react-router-dom';
 import { useState} from 'react';
-// import { getPropertyById } from '../../services/api/propertyAPI';
+// import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi';
+// import { getRecentCrimes } from '../../services/api/neighbourhoodApi';
 
 // Updated mock data to match real data shape from backend
-const mockProperty = {
+const mockNeighbourhood = {
     id: 1,
-    name: "123 Tiverton Road",
-    ppm: 1800,
-    neighbourhood: {                  // Added neighbourhood object
-        id: 1,
-        name: "Selly Oak",
-        safetyScore: 74,
-        crimeTotalsByType: {
-            "Shoplifting": 824,
-            "Bicycle theft": 63,
-            "Anti social behaviour": 314,
-            "Drugs": 123,
-            "Theft from the person": 36,
-            "Robbery": 129,
-            "Violent crime": 1755,
-            "Public order": 285,
-            "Vehicle crime": 378,
-            "Burglary": 342,
-            "Other crime": 71,
-            "Other theft": 311,
-            "Possession of weapons": 96,
-            "Criminal damage arson": 293,
-        }
-    }
+    name: "Selly Oak",
+    safetyScore: 51,
+    latitude: 51.5137,
+    longitude: -0.1337,
+    population: 15000,
+    crimeTotalsByType: {
+        "Shoplifting": 824,
+        "Bicycle theft": 63,
+        "Anti social behaviour": 314,
+        "Drugs": 123,
+        "Theft from the person": 36,
+        "Robbery": 129,
+        "Violent crime": 1755,
+        "Public order": 285,
+        "Vehicle crime": 378,
+        "Burglary": 342,
+        "Other crime": 71,
+        "Other theft": 311,
+        "Possession of weapons": 96,
+        "Criminal damage arson": 293,
+    },
+    // most recent month of crimes from backend (CrimeRecord.java)
+    recentCrimes: [
+        { id: 1, type: "Vehicle crime",         latitude: 51.5237, longitude: -0.1585, location: "Near Selly Oak Station" },
+        { id: 2, type: "Anti-social behaviour", latitude: 51.5313, longitude: -0.1570, location: "Near Selly Oak Park" },
+        { id: 3, type: "Bicycle theft",      latitude: 51.5220, longitude: -0.1560, location: "Near Tesco Express" },
+        { id: 4, type: "Violence",              latitude: 51.5198, longitude: -0.1610, location: "Near Bristol Pear" },
+        { id: 5, type: "Drugs",       latitude: 51.5240, longitude: -0.1590, location: "Near Bristol Pear" },
+        { id: 6, type: "Vehicle crime",         latitude: 51.5201, longitude: -0.1550, location: "Near Sainsbury" },
+    ]
 };
 
 // Helper function to label score by color
@@ -70,31 +78,44 @@ export default function SafetyScorePage() {
 
     if (!property) return <p className="p-6">Loading...</p>
     */
-    const property= mockProperty
-    const { color, label, bg } = getSafetyColor(property.neighbourhood.safetyScore);
-    const categories = Object.entries(property.neighbourhood.crimeTotalsByType)
-        .map(([label, count]) => ({
-            label,
+    const neighbourhood= mockNeighbourhood;
+    const [page, setPage] = useState(1);
+    const { color, label, bg } = getSafetyColor(neighbourhood.safetyScore);
+    const categories = Object.entries(neighbourhood.crimeTotalsByType)
+        .map(([crimeLabel, count]) => ({
+            label: crimeLabel,
             count,
-            color: getCategoryColor(label)
+            color: getCategoryColor(crimeLabel)
         }));
     const total = categories.reduce((sum, cat) => sum + cat.count, 0);
+
+    const CRIMES_PER_PAGE = 6;
+
+    // slice the crimes array based on current page
+    const totalPages = Math.ceil(neighbourhood.recentCrimes.length / CRIMES_PER_PAGE);
+    const visibleCrimes = neighbourhood.recentCrimes.slice(
+        (page - 1) * CRIMES_PER_PAGE,
+        page * CRIMES_PER_PAGE
+    );
 
     return (
         <div className="max-w-2x1 mx-auto px-4 py-8">
 
-            {/* Address header */}
+            {/* Neighbourhood header */}
             <div className="mb-6">
-                <p className="text-sm">{property.neighbourhood.name}</p>
-                <h1 className="text-2xl font-semibold">{property.name}</h1>
-                <p className="mt-1">£{property.ppm.toLocaleString()}/mo</p>
+                <p className="text-sm">Neighbourhood</p>
+                <h1 className="text-2xl font-semibold">{neighbourhood.name}</h1>
+                <p className="mt-1">
+                    Population: {neighbourhood.population.toLocaleString()} ·{' '}
+                    {neighbourhood.latitude.toFixed(4)}, {neighbourhood.longitude.toFixed(4)}
+                </p>
             </div>
 
             {/* Overall safety score card */}
             <div className="rounded-x1 border  p-6 mb-6 flex items-center gap-6">
                 <div className="rounded-full flex items-center justify-center shrink-0" style={{ width: 80, height: 80, background: bg, border: `3px solid ${color}` }}>
                     <span style={{ color, fontSize: 24, fontWeight: 600 }}>
-                        {property.neighbourhood.safetyScore}
+                        {neighbourhood.safetyScore}
                     </span>
                 </div>
                 <div>
@@ -108,9 +129,9 @@ export default function SafetyScorePage() {
                 </div>
             </div>
 
-            { /* Crime breakdown */}
+            { /* Crime breakdown bars */}
             <div className="rounded-x1 border p-6 mb-6">
-                <h2 className="text-base font-semibold mb-4">Crime breakdown</h2>
+                <h2 className="text-base font-semibold mb-4">Crime breakdown - past year</h2>
                 <div className="space-y-3">
                     {categories.map((cat) => {
                         const pct = Math.round((cat.count / total) * 100);
@@ -130,11 +151,66 @@ export default function SafetyScorePage() {
                 </div>
             </div>
 
-            {/* Pie chart */}
+            {/* Recent crimes list - latest month */}
+            <div className="rounded-xl border border-slate-200 p-6 mb-6">
+                <h2 className="text-base font-semibold mb-4">
+                    Recent crimes — latest month
+                    <span className="font-normal text-sm ml-2">
+                        ({neighbourhood.recentCrimes.length} recorded)
+                    </span>
+                </h2>
+ 
+                <div className="space-y-3">
+                    {visibleCrimes.map((crime) => (
+                        <div
+                            key={crime.id}
+                            className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100"
+                        >
+                            {/* colour dot matching crime type */}
+                            <div
+                                className="rounded-full shrink-0 mt-1"
+                                style={{ width: 10, height: 10, background: getCategoryColor(crime.type) }}
+                            />
+ 
+                            <div className="flex-1">
+                                {/* crime type */}
+                                <p className="text-sm font-medium">{crime.type}</p>
+                                {/* rough location */}
+                                <p className="text-sm">{crime.location}</p>
+                                {/* coordinates */}
+                                <p className="text-xs mt-1">
+                                    {crime.latitude.toFixed(4)}, {crime.longitude.toFixed(4)}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Pagination buttons */}
+                <div className="flex items-center justify-between mt-4">
+                    <button
+                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30"
+                        onClick={() => setPage(p => p - 1)}
+                        disabled={page === 1}
+                    >
+                        Previous
+                    </button>
+                    <span className="text-sm">Page {page}</span>
+                    <button
+                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30"
+                        onClick={() => setPage(p => p + 1)}
+                        disabled={page === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            {/* Pie chart
             <div className="rounded-x1 border border-slate-200 p-6 mb-6">
                 <h2 className="text-base font-semibold text-slate-700 mb-4">Crime distribution - past 12 months</h2>
-                <PieChart categories={categories} total={total} />
-            </div>
+                <PieChart categories={categories} total={total} /> 
+            </div> */}
 
         </div>
     );
