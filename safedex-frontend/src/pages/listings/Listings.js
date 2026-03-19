@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getPropertiesPage } from '../../services/api/propertyAPI';
 
 export default function Listings() {
-    const [allProperties, setAllProperties] = useState([]);
     const [filteredProperties, setFilteredProperties] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,14 +13,28 @@ export default function Listings() {
     });
     const [sortBy, setSortBy] = useState('price'); // "price", "safetyScore", or "date"
     const [sortOrder, setSortOrder] = useState('ASC'); // "ASC" or "DESC"
+    const [selectedProperty, setSelectedProperty] = useState(null); // details state
 
-    useEffect(() => {
-        fetchAllProperties();
-    }, []);
+    // Debouncing ref
+    const debounceTimeoutRef = useRef(null);
 
     useEffect(() => {
         applyFilters();
-    }, [allProperties, filters, sortBy, sortOrder]);
+    }, [sortBy, sortOrder]);
+
+    // Debounced filter application
+    const debouncedApplyFilters = useCallback(() => {
+        if (debounceTimeoutRef.current) {
+            clearTimeout(debounceTimeoutRef.current);
+        }
+        debounceTimeoutRef.current = setTimeout(() => {
+            applyFilters();
+        }, 1000); // 1000ms delay after user stops typing
+    }, []);
+
+    useEffect(() => {
+        debouncedApplyFilters();
+    }, [filters, debouncedApplyFilters]);
 
     const normalizeSortField = (field) => {
         const validFields = ['price', 'safetyScore', 'date'];
@@ -60,11 +73,18 @@ export default function Listings() {
         });
     };
 
-    const fetchAllProperties = async () => {
+    const applyFilters = async () => {
         try {
             setLoading(true);
-            const data = await getPropertiesPage(1);
-            setAllProperties(data);
+            // Convert frontend filter names to backend parameter names
+            const query = filters.neighbourhood ? filters.neighbourhood : null;
+            const minPrice = null; // Not implemented in UI yet
+            const maxPrice = filters.maxPrice ? parseFloat(filters.maxPrice) : null;
+            const minSafetyScore = filters.minSafetyScore ? parseInt(filters.minSafetyScore) : null;
+
+            const data = await getPropertiesPage(1, query, minPrice, maxPrice, minSafetyScore, null, null, null, null, null, sortBy, sortOrder);
+            setFilteredProperties(data);
+            setCurrentPage(1); // Reset to first page when filters change
             setError(null);
         } catch (err) {
             setError('Failed to load properties');
@@ -72,31 +92,6 @@ export default function Listings() {
         } finally {
             setLoading(false);
         }
-    };
-
-    const applyFilters = () => {
-        let filtered = allProperties;
-
-        if (filters.minSafetyScore) {
-            filtered = filtered.filter(property =>
-                property.neighbourhood && property.neighbourhood.safetyScore >= parseInt(filters.minSafetyScore)
-            );
-        }
-
-        if (filters.maxPrice) {
-            filtered = filtered.filter(property => property.ppm <= parseFloat(filters.maxPrice));
-        }
-
-        if (filters.neighbourhood) {
-            filtered = filtered.filter(property =>
-                property.neighbourhood && property.neighbourhood.name.toLowerCase().includes(filters.neighbourhood.toLowerCase())
-            );
-        }
-
-        filtered = sortProperties(filtered);
-
-        setFilteredProperties(filtered);
-        setCurrentPage(1); // Reset to first page when filters change
     };
 
     const handleFilterChange = (e) => {
@@ -296,7 +291,10 @@ export default function Listings() {
                                     </div>
                                 )}
                                 <div className="flex space-x-2">
-                                    <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                                    <button
+                                        onClick={() => setSelectedProperty(property)}
+                                        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+                                    >
                                         View Details
                                     </button>
                                     <button className="px-3 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
@@ -330,6 +328,40 @@ export default function Listings() {
                         </div>
                     )}
                 </>
+            )}
+
+            {selectedProperty && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                    <div className="w-full max-w-lg bg-white rounded-lg p-6 shadow-2xl">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold">{selectedProperty.name}</h2>
+                            <button
+                                onClick={() => setSelectedProperty(null)}
+                                className="text-gray-500 hover:text-gray-700"
+                            >
+                                Close
+                            </button>
+                        </div>
+                        <p className="mb-2 font-bold">£{selectedProperty.ppm}/month</p>
+                        <p className="mb-2">{selectedProperty.description || 'No description available.'}</p>
+                        <p className="mb-2">Type: {selectedProperty.type || 'N/A'}</p>
+                        <p className="mb-2">Bedrooms: {selectedProperty.bedrooms || 'N/A'}</p>
+                        <p className="mb-2">Bathrooms: {selectedProperty.bathrooms || 'N/A'}</p>
+                        <p className="mb-2">Road: {selectedProperty.road || 'N/A'}</p>
+                        <p className="mb-2">Postcode: {selectedProperty.postcode || 'N/A'}</p>
+                        <p className="mb-2">Phone: {selectedProperty.phoneNumber || 'N/A'}</p>
+                        <p className="mb-4">Email: {selectedProperty.email || 'N/A'}</p>
+                        {selectedProperty.neighbourhood ? (
+                            <div className="text-sm text-gray-600">
+                                <p>Neighbourhood: {selectedProperty.neighbourhood.name}</p>
+                                <p>Safety Score: {selectedProperty.neighbourhood.safetyScore}/100</p>
+                                <p>Population: {selectedProperty.neighbourhood.population.toLocaleString()}</p>
+                            </div>
+                        ) : (
+                            <p>No neighbourhood data.</p>
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );
