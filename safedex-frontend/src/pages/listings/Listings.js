@@ -12,6 +12,8 @@ export default function Listings() {
         maxPrice: '',
         neighbourhood: ''
     });
+    const [sortBy, setSortBy] = useState('price'); // "price", "safetyScore", or "date"
+    const [sortOrder, setSortOrder] = useState('ASC'); // "ASC" or "DESC"
 
     useEffect(() => {
         fetchAllProperties();
@@ -19,12 +21,48 @@ export default function Listings() {
 
     useEffect(() => {
         applyFilters();
-    }, [allProperties, filters]);
+    }, [allProperties, filters, sortBy, sortOrder]);
+
+    const normalizeSortField = (field) => {
+        const validFields = ['price', 'safetyScore', 'date'];
+        return validFields.includes(field) ? field : 'price';
+    };
+
+    const normalizeSortOrder = (order) => (order === 'DESC' ? 'DESC' : 'ASC');
+
+    const sortProperties = (properties) => {
+        const field = normalizeSortField(sortBy);
+        const order = normalizeSortOrder(sortOrder);
+
+        return [...properties].sort((a, b) => {
+            let aValue;
+            let bValue;
+
+            if (field === 'price') {
+                aValue = a.ppm ?? 0;
+                bValue = b.ppm ?? 0;
+            } else if (field === 'safetyScore') {
+                aValue = a.neighbourhood?.safetyScore ?? 0;
+                bValue = b.neighbourhood?.safetyScore ?? 0;
+            } else {
+                const parseDate = (obj) => {
+                    const value = obj?.date || obj?.createdAt || obj?.created_at;
+                    const parsed = value ? Date.parse(value) : NaN;
+                    return Number.isNaN(parsed) ? 0 : parsed;
+                };
+                aValue = parseDate(a);
+                bValue = parseDate(b);
+            }
+
+            if (aValue === bValue) return 0;
+            const comparison = aValue > bValue ? 1 : -1;
+            return order === 'ASC' ? comparison : -comparison;
+        });
+    };
 
     const fetchAllProperties = async () => {
         try {
             setLoading(true);
-            // For now, fetch first page. In a real app, you'd fetch all or implement server-side filtering
             const data = await getPropertiesPage(1);
             setAllProperties(data);
             setError(null);
@@ -55,6 +93,8 @@ export default function Listings() {
             );
         }
 
+        filtered = sortProperties(filtered);
+
         setFilteredProperties(filtered);
         setCurrentPage(1); // Reset to first page when filters change
     };
@@ -65,6 +105,17 @@ export default function Listings() {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handleSortChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'sortBy') {
+            setSortBy(value);
+            return;
+        }
+        if (name === 'sortOrder') {
+            setSortOrder(value);
+        }
     };
 
     const clearFilters = () => {
@@ -163,6 +214,39 @@ export default function Listings() {
                         />
                     </div>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Sort by
+                        </label>
+                        <select
+                            name="sortBy"
+                            value={sortBy}
+                            onChange={handleSortChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="price">Price</option>
+                            <option value="safetyScore">Safety Score</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Sort direction
+                        </label>
+                        <select
+                            name="sortOrder"
+                            value={sortOrder}
+                            onChange={handleSortChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="ASC">Ascending</option>
+                            <option value="DESC">Descending</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div className="mt-4">
                     <button
                         onClick={clearFilters}
