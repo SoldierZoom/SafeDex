@@ -4,7 +4,7 @@ import { getPropertyById } from 'services/api/propertyAPI';
 //to get id from url and to navigate back to listings
 import { useParams, useNavigate } from 'react-router-dom';
 //icons for styling from https://lucide.dev/icons/
-import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert } from 'lucide-react';
+import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert , ArrowBigRight} from 'lucide-react';
 
 export default function IndividualListing() {
     const {id} = useParams();
@@ -59,16 +59,16 @@ export default function IndividualListing() {
 
     return (
         //stuff goes here
-        <div className="container mx-auto px-2 py-4">
+        <div className="container overflow-hidden mx-auto px-2 py-4">
             {/*address and price*/}
-            <h1 className="text-4xl font-bold mb-1">{property.road}, {property.neighbourhood.name}, {property.postcode}</h1>
+            <h1 className="text-4xl font-bold mt-2 mb-1">{property.road}, {property.neighbourhood.name}, {property.postcode}</h1>
             <h2 className="text-3xl font-semibold mb-6">£{property.ppm} ppm</h2>
             
            {/*two columns, left side has property info, right has contant infi*/}
-            <div className='flex px-2 gap-4 items-center'>
+            <div className='flex flex-wrap px-2 gap-4 items-start w-full'>
             
                 {/*left col */}
-                <div className = "">
+                <div className = "flex-1 min-w-72">
                 
                 {/*property info column*/}
                 <h2 className="text-2xl font-semibold mb-4">Property details:</h2>
@@ -94,7 +94,7 @@ export default function IndividualListing() {
                 {/*description*/}
                 <h2 className="text-2xl font-semibold mb-2">Description</h2>
 
-                <div className='flex max-w-xl mb-4 text-xl'>
+                <div className='flex mb-4 text-xl'>
                     {property.description ?
                     <p>{property.description}</p> :
                     <p>This lovely {propertyTypeReformat.toLowerCase()} located on {property.road} in {property.neighbourhood.name} has {property.bedrooms} bedrooms and {property.bathrooms} bathrooms!</p>}
@@ -102,13 +102,18 @@ export default function IndividualListing() {
                 </div>
                 
                 {/*right columh*/}
-                <div className = "flex gap-4 p-3">
+                <div className = "flex flex-row gap-4 p-3 flex-wrap">
 
                 {/*safety score*/}
                     <div className={`rounded-lg p-4 text-center ${safetyScoreColour}`}>
                         <h2 className="text-2xl font-semibold mb-2">Safety score</h2>
                         <p className="text-5xl font-bold mb-2">{property.neighbourhood.safetyScore}</p>
                         <p className="text-gray-500 text-md">out of 100</p>
+                        <button onClick={() => navigate(`/neighbourhood/${property.neighbourhood.id}`)}
+                            className="mt-2 text-md hover:underline font-semibold px-2 py-1 rounded-lg">
+                            <ArrowBigRight className="inline mr-1 w-4 h-4"/>
+                            View Breakdown
+                        </button>
                     </div>
 
                 {/*contact info*/}
@@ -117,13 +122,13 @@ export default function IndividualListing() {
 
                     <div className = "text-center text-lg p-4">
                         <div>
-                            <PhoneCall className="inline w-5 h-5 mb-1"/>
-                            <p>Phone number:</p>
+                            <PhoneCall className="inline w-5 h-5"/>
+                            <p className = "font-semibold">Phone number:</p>
                             <p className = "mb-3">{property.phoneNumber}</p>
                         </div>
                         {property.email &&  <div>
-                            <Mail className="inline w-5 h-5 mr-1"/>
-                            <p>Email address:</p> 
+                            <Mail className="inline w-5 h-5"/>
+                            <p className = "font-semibold">Email address:</p> 
                             <p className = "mb-3">{property.email}</p></div>
                             }
                         </div>
