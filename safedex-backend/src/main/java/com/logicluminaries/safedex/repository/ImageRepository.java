@@ -1,4 +1,7 @@
 package com.logicluminaries.safedex.repository;
 
-public interface ImageRepository {
+import com.logicluminaries.safedex.model.Image;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ImageRepository extends JpaRepository<Image, Long> {
 }
