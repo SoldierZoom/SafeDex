@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Entity
 @Data
@@ -46,4 +48,7 @@ public class Property {
     @ManyToOne
     @JoinColumn(name = "neighbourhood_id")//foreign key
     private Neighbourhood neighbourhood;
+
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images;
 }
