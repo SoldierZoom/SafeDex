@@ -4,13 +4,15 @@ import { getPropertyById } from 'services/api/propertyAPI';
 //to get id from url and to navigate back to listings
 import { useParams, useNavigate } from 'react-router-dom';
 //icons for styling from https://lucide.dev/icons/
-import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert , ArrowBigRight} from 'lucide-react';
+import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert , ArrowBigRight, ChevronLeft, ChevronRight} from 'lucide-react';
 import {formatPropertyType, getSafetyScoreColour} from './IndividualListingsUtils'
 
 export default function IndividualListing() {
     const {id} = useParams();
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
+    //for flicking between the images
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
         //nts remodelled from heatmap
         useEffect(() => {
@@ -55,18 +57,52 @@ export default function IndividualListing() {
     //sets the colours for displaying the safety score
     const safetyScoreColour = getSafetyScoreColour(property.neighbourhood.safetyScore);
 
+
     return (
         //stuff goes here
         <div className="container overflow-hidden mx-auto px-2 py-4">
             {/*address and price*/}
             <h1 className="text-4xl font-bold mt-2 mb-1">{property.road}, {property.neighbourhood.name}, {property.postcode}</h1>
             <h2 className="text-3xl font-semibold mb-6">£{property.ppm} ppm</h2>
+                       
             
            {/*two columns, left side has property info, right has contant infi*/}
             <div className='flex flex-wrap px-2 gap-4 items-start w-full'>
             
                 {/*left col */}
                 <div className = "flex-1 min-w-72">
+
+                {property.images && property.images.length > 0 ? (
+                
+                <div className="flex items-center justify-center gap-4 mb-4 mt-2">
+        
+                    {/* left arrow */}
+                    <button 
+                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30"
+                        onClick={() => setCurrentImageIndex(prev => prev - 1)}
+                        disabled={currentImageIndex === 0}>
+                            <ChevronLeft className="w-6 h-6" />
+                    </button>
+
+                    {/* image */}
+                    <img 
+                        src={property.images.sort((a, b) => a.position - b.position)[currentImageIndex].path}
+                        alt={`${property.road} image ${currentImageIndex + 1}`}
+                        className="rounded-lg max-w-[500px] max-h-[350px] object-cover"/>
+
+                    {/* right arrow */}
+                    <button 
+                        onClick={() => setCurrentImageIndex(prev => prev + 1)}
+                        disabled={currentImageIndex === property.images.length - 1}
+                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30">
+                        <ChevronRight className="w-6 h-6" />
+                    </button>
+
+                </div>)
+            :(
+                <div className="w-96 h-64 bg-gray-200 rounded-lg mb-4 flex items-center justify-center mx-auto">
+                    <p className="text-gray-500">No image available</p>
+                </div>)}
                 
                 {/*property info column*/}
                 <h2 className="text-2xl font-semibold mb-4">Property details:</h2>
