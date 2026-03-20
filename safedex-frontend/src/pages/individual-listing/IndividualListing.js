@@ -5,6 +5,7 @@ import { getPropertyById } from 'services/api/propertyAPI';
 import { useParams, useNavigate } from 'react-router-dom';
 //icons for styling from https://lucide.dev/icons/
 import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert , ArrowBigRight} from 'lucide-react';
+import {formatPropertyType, getSafetyScoreColour} from './IndividualListingsUtils'
 
 export default function IndividualListing() {
     const {id} = useParams();
@@ -49,13 +50,10 @@ export default function IndividualListing() {
         </div>);
 
     //reformats the property type listing e.g. SEMI_DETACHED goes to Semi Detached
-    let propertyTypeReformat = property.type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    const propertyTypeReformat = formatPropertyType(property.type);
 
     //sets the colours for displaying the safety score
-    const safetyScoreColour = 
-    property.neighbourhood.safetyScore >= 70 ? 'bg-green-100 text-green-600' :
-    property.neighbourhood.safetyScore >= 40 ? 'bg-yellow-100 text-yellow-700' :
-    'bg-red-100 text-red-600';
+    const safetyScoreColour = getSafetyScoreColour(property.neighbourhood.safetyScore);
 
     return (
         //stuff goes here
