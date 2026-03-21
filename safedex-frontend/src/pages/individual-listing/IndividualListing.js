@@ -12,7 +12,7 @@ export default function IndividualListing() {
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
     //for flicking between the images
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentImage, setcurrentImage] = useState(0);
     
         //nts remodelled from heatmap
         useEffect(() => {
@@ -59,8 +59,9 @@ export default function IndividualListing() {
 
 
     return (
-        //stuff goes here
+        //Overall div container
         <div className="container overflow-hidden mx-auto px-2 py-4">
+            
             {/*address and price*/}
             <h1 className="text-4xl font-bold mt-2 mb-1">{property.road}, {property.neighbourhood.name}, {property.postcode}</h1>
             <h2 className="text-3xl font-semibold mb-6">£{property.ppm} ppm</h2>
@@ -72,34 +73,30 @@ export default function IndividualListing() {
                 {/*left col */}
                 <div className = "flex-1 min-w-72">
 
+                {/*image carousel*/}
                 {property.images && property.images.length > 0 ? (
                 
-                <div className="flex items-center justify-center gap-4 mb-4 mt-2">
-        
-                    {/* left arrow */}
+                <div className="mb-4 mt-2 flex items-center justify-center gap-4">
+                    {/*left button*/}
                     <button 
                         className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30"
-                        onClick={() => setCurrentImageIndex(prev => prev - 1)}
-                        disabled={currentImageIndex === 0}>
-                            <ChevronLeft className="w-6 h-6" />
-                    </button>
-
-                    {/* image */}
+                        onClick={() => setcurrentImage(prev => prev - 1)}
+                        disabled={currentImage === 0}>
+                            <ChevronLeft className="w-6 h-6"/></button>
+                    {/*pictures*/}
                     <img 
-                        src={property.images.sort((a, b) => a.position - b.position)[currentImageIndex].path}
-                        alt={`${property.road} image ${currentImageIndex + 1}`}
-                        className="rounded-lg max-w-[500px] max-h-[350px] object-cover"/>
-
-                    {/* right arrow */}
+                        src={property.images.sort((a, b) => a.position - b.position)[currentImage].path}
+                        alt={`image of listing on ${property.road}, ${property.postcode}. Image number ${currentImage + 1}`}
+                        className="rounded-md max-w-[500px] max-h-[400px] object-cover"/>
+                    {/*right button */}
                     <button 
-                        onClick={() => setCurrentImageIndex(prev => prev + 1)}
-                        disabled={currentImageIndex === property.images.length - 1}
+                        onClick={() => setcurrentImage(prev => prev + 1)}
+                        disabled={currentImage === property.images.length - 1}
                         className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30">
-                        <ChevronRight className="w-6 h-6" />
-                    </button>
+                        <ChevronRight className="w-6 h-6" /></button>
 
                 </div>)
-            :(
+                :(
                 <div className="w-96 h-64 bg-gray-200 rounded-lg mb-4 flex items-center justify-center mx-auto">
                     <p className="text-gray-500">No image available</p>
                 </div>)}
@@ -136,44 +133,54 @@ export default function IndividualListing() {
                 </div>
                 
                 {/*right columh*/}
-                <div className = "flex flex-row gap-4 p-3 flex-wrap">
+                <div className = "flex md:flex-col flex-row min-w-80 gap-4 p-3 shrink-0">
 
-                {/*safety score*/}
+                    {/*safety score*/}
                     <div className={`rounded-lg p-4 text-center ${safetyScoreColour}`}>
                         <h2 className="text-2xl font-semibold mb-2">Safety score</h2>
                         <p className="text-5xl font-bold mb-2">{property.neighbourhood.safetyScore}</p>
                         <p className="text-gray-500 text-md">out of 100</p>
                         <button onClick={() => navigate(`/neighbourhood/${property.neighbourhood.id}`)}
-                            className="mt-2 text-md hover:underline font-semibold px-2 py-1 rounded-lg">
+                            className="mt-2 text-md underline font-semibold px-2 py-1 rounded-lg hover:outline">
                             <ArrowBigRight className="inline mr-1 w-4 h-4"/>
                             View Breakdown
                         </button>
                     </div>
 
-                {/*contact info*/}
-                <div className="bg-blue-100 flex flex-col justify-center rounded-lg p-4 text-center">
-                    <h2 className = "text-2xl font-semibold mb-2">Contact information</h2>
+                    {/*contact info*/}
+                    <div className="bg-blue-100 flex flex-col justify-center rounded-lg p-4 text-center">
+                        <h2 className = "text-2xl font-semibold mb-2">Contact information</h2>
 
-                    <div className = "text-center text-lg p-4">
-                        <div>
-                            <PhoneCall className="inline w-5 h-5"/>
-                            <p className = "font-semibold">Phone number:</p>
-                            <p className = "mb-3">{property.phoneNumber}</p>
-                        </div>
-                        {property.email &&  <div>
-                            <Mail className="inline w-5 h-5"/>
-                            <p className = "font-semibold">Email address:</p> 
-                            <p className = "mb-3">{property.email}</p></div>
-                            }
+                        <div className = "text-center text-lg p-4">
+                            <div>
+                                <PhoneCall className="inline w-5 h-5"/>
+                                <p className = "font-semibold">Phone number:</p>
+                                <p className = "mb-3">{property.phoneNumber}</p>
+                            </div>
+                            {property.email &&  <div>
+                                <Mail className="inline w-5 h-5"/>
+                                <p className = "font-semibold">Email address:</p> 
+                                <p className = "mb-3">{property.email}</p></div>
+                                }
                         </div>
                     </div>
                 </div>
+                    
             </div>
+
+            <div className = "flex justify-between">
             
             <button className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500">
                 <Heart className="inline w-5 h-5 mr-1"/>
                 Add to favourites!
             </button>
+
+            <button
+            onClick={() => navigate(-1)}
+            className="mt-5 text-lg bg-gray-300 px-4 py-2 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold">
+                Back
+            </button>
+            </div>
        
         </div>
     );
