@@ -3,7 +3,7 @@ import NavBar from '../components/NavBar';
 export default function Layout({ children }) {
     return (
         <main>
-            <nav className="fixed inset-0 min-w-full h-[60px] bg-white">
+            <nav className="fixed inset-0 z-50 min-w-full h-[60px] bg-slate-50">
                 <NavBar />
             </nav>
             <div className="h-[60px]" /> {/* Filler div */}
