@@ -10,7 +10,7 @@ const features = [
         href="https://data.police.uk" 
         target="_blank" 
         rel="noreferrer"
-        className="font-medium text-indigo-600 hover:underline"
+        className="font-medium text-blue-500 hover:underline"
       >
         data.police.uk
       </a>

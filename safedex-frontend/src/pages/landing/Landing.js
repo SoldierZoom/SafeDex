@@ -30,8 +30,8 @@ export default function Landing() {
 
           {/*Title Section*/}
           <div className='absolute inset-0 flex flex-col items-center justify-center text-center'>
-            <p className='md:text-3xl sm:text-2xl text-3xl font-mono p-1 uppercase text-white'> A new way to Property Search  </p>
-            <h1 className='md:text-8xl sm:text-7xl text-5xl font-bold font-mono md:pb-24 text-white'>Get Home-Safe with SafeDex</h1> 
+            <p className='md:text-3xl sm:text-2xl text-3xl font-mono p-1 text-white'> A new way to Property Search.  </p>
+            <h1 className='uppercase md:text-8xl sm:text-7xl text-5xl font-bold font-sans md:pb-24 text-white'>Get Home-Safe with SafeDex</h1> 
 
             {/* Call to Action: Button that links to view properties page copied from: https://buttons.ibelick.com*/} 
             <Link 
