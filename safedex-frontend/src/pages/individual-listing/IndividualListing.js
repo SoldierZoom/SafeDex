@@ -14,7 +14,7 @@ export default function IndividualListing() {
     //for switching between the images
     const [currentImage, setcurrentImage] = useState(0);
     
-        //fetches current listing based on URL id
+        //fetches current listing based on id in the URL
         useEffect(() => {
             function fetchProperty() {
                 getPropertyById(id)
