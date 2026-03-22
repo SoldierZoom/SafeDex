@@ -1,4 +1,3 @@
-//nts copied from heatmsp
 import { useState, useEffect } from 'react';
 import { getPropertyById } from 'services/api/propertyAPI';
 //to get id from url and to navigate back to listings
@@ -10,27 +9,28 @@ import {formatPropertyType, getSafetyScoreColour} from './IndividualListingsUtil
 export default function IndividualListing() {
     const {id} = useParams();
     const [property, setProperty] = useState(null);
+    //for loading screen
     const [loading, setLoading] = useState(true);
-    //for flicking between the images
+    //for switching between the images
     const [currentImage, setcurrentImage] = useState(0);
     
-        //nts remodelled from heatmap
+        //fetches current listing based on URL id
         useEffect(() => {
-            fetchProperty();
-        }, []);
+            function fetchProperty() {
+                getPropertyById(id)
+                    .then(data =>{
+                        setProperty(data);
+                        setLoading(false);})
+                    .catch(error => {
+                        console.error(`An error occured when fetching a property: ${error.message}`);
+                        setLoading(false);});
+            }
+        fetchProperty();
+        }, [id]);
     
-        function fetchProperty() {
-            getPropertyById(id)
-                .then(data =>{
-                    setProperty(data);
-                    setLoading(false);})
-                .catch(error => {
-                    console.error(`An error occured when fetching a property: ${error.message}`);
-                    setLoading(false);
-                });
-        }
+        
 
-    //For navigating back to listings
+    //for navigating back to listings
     const navigate = useNavigate();
 
     //shows loading whilst accessing the API
@@ -40,7 +40,7 @@ export default function IndividualListing() {
         </div>
     );
 
-    //shows error if can't api doesn't return a listing
+    //shows error if api doesn't return a listing
     if (property == null) return (<div className = "container px-2 py-5 font-semibold text-center">
             <TriangleAlert className= " mt-5 text-red-600 place-self-center w-20 h-20"/>
             <h1 className = "mt-3 text-3xl">Listing Not Found</h1>
@@ -62,12 +62,12 @@ export default function IndividualListing() {
         //Overall div container
         <div className="container overflow-hidden mx-auto px-2 py-4">
             
-            {/*address and price*/}
+            {/*address and price header*/}
             <h1 className="text-4xl font-bold mt-2 mb-1">{property.road}, {property.neighbourhood.name}, {property.postcode}</h1>
             <h2 className="text-3xl font-semibold mb-6">£{property.ppm} ppm</h2>
                        
             
-           {/*two columns, left side has property info, right has contant infi*/}
+           {/*two columns, left images n property info, right contant infi n safety score*/}
             <div className='flex flex-wrap px-2 gap-4 items-start w-full'>
             
                 {/*left col */}
@@ -83,21 +83,22 @@ export default function IndividualListing() {
                         onClick={() => setcurrentImage(prev => prev - 1)}
                         disabled={currentImage === 0}>
                             <ChevronLeft className="w-6 h-6"/></button>
-                    {/*pictures*/}
+                    
                     <img 
                         src={property.images.sort((a, b) => a.position - b.position)[currentImage].path}
-                        alt={`image of listing on ${property.road}, ${property.postcode}. Image number ${currentImage + 1}`}
+                        alt={`Listing on ${property.road}, ${property.postcode}.`}
                         className="rounded-md max-w-[500px] max-h-[400px] object-cover"/>
                     {/*right button */}
-                    <button 
+                    <button
                         onClick={() => setcurrentImage(prev => prev + 1)}
                         disabled={currentImage === property.images.length - 1}
                         className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30">
                         <ChevronRight className="w-6 h-6" /></button>
-
+                
+                {/*error incase no images available*/}
                 </div>)
                 :(
-                <div className="w-96 h-64 bg-gray-200 rounded-lg mb-4 flex items-center justify-center mx-auto">
+                <div className="py-4 px-6 outline rounded-lg flex text-center mb-4">
                     <p className="text-gray-500">No image available</p>
                 </div>)}
                 
@@ -170,6 +171,7 @@ export default function IndividualListing() {
 
             <div className = "flex justify-between">
             
+            {/*favourites and back buttons*/}
             <button className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500">
                 <Heart className="inline w-5 h-5 mr-1"/>
                 Add to favourites!
