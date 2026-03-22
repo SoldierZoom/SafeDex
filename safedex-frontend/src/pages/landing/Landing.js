@@ -36,7 +36,7 @@ export default function Landing() {
             {/* Call to Action: Button that links to view properties page copied from: https://buttons.ibelick.com*/} 
             <Link 
               to='/listings'
-              className="font-mono text-2xl border border-white/60 text-white px-10 py-3 rounded-lg hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 mt-20 "
+              className="font-mono text-2xl border border-white/60 text-white px-10 py-3 rounded-lg hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
               tabIndex={0}> {/*links to listings page*/}
               Search Property Listings →
             </Link>
