@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PropertyService {
     private final PropertyRepository propertyRepository;
-    private static final int ITEMS_PER_PAGE = 10;//wil obviously increase later
+    private static final int ITEMS_PER_PAGE = 1000; // increase page size to show more properties
 
     //Functions used to add properties to db
     //adds entry
