@@ -1,15 +1,16 @@
 import NavBar from '../components/NavBar';
+import { useLocation } from 'react-router-dom';
 
 export default function Layout({ children }) {
-    return (
-        <main>
-            <nav className="fixed inset-0 z-50 min-w-full h-[60px] bg-slate-50">
-                <NavBar />
-            </nav>
-            <div className="h-[60px]" /> {/* Filler div */}
-            <div className="px-2">
-                {children}
-            </div>
-        </main>
-    )
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
+  return (
+    <main>
+      <NavBar />
+      <div className={isLanding ? '' : 'pt-16'}>
+        {children}
+      </div>
+    </main>
+  )
 }

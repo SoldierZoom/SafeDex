@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom'
 
 export default function Landing() {
   return (
-      <main> {/*Semantic HTML*/}
+      <div> 
         {/* Section 1: Hero Section with CTA */}
         <section className='relative w-full h-screen overflow-hidden'>
         <img className='absolute top-0 left-0 w-full h-screen object-cover'
@@ -36,7 +36,7 @@ export default function Landing() {
             {/* Call to Action: Button that links to view properties page copied from: https://buttons.ibelick.com*/} 
             <Link 
               to='/listings'
-              className="font-mono text-2xl border border-white/60 text-white px-10 py-3 rounded-lg hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+              className="font-mono text-2xl border border-white/60 text-white px-10 py-3 hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
               tabIndex={0}> {/*links to listings page*/}
               Search Property Listings →
             </Link>
@@ -64,6 +64,6 @@ export default function Landing() {
         <section className='w-full mt-1'>
           <FooterSection />
         </section>
-      </main>
+      </div>
   )
 }
