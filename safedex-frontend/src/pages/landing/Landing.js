@@ -21,7 +21,7 @@ export default function Landing() {
           <div 
             className='absolute inset-0 pointer-events-none'
             style={{
-              backgroundImage: 'linear-gradient(rgba(175, 151, 151, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(220, 220, 220, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
               backgroundSize: '70px 70px'
             }}
           ></div>
@@ -31,7 +31,7 @@ export default function Landing() {
           {/*Title Section*/}
           <div className='absolute inset-0 flex flex-col items-center justify-center text-center'>
             <p className='md:text-3xl sm:text-2xl text-3xl font-mono p-1 text-white'> A new way to Property Search.  </p>
-            <h1 className='uppercase md:text-8xl sm:text-7xl text-5xl font-bold font-sans md:pb-24 text-white'>Get Home-Safe with SafeDex</h1> 
+            <h1 className='uppercase md:text-8xl sm:text-7xl text-5xl font-bold font-sans md:pb-24 text-white [text-shadow:0_0_6px_rgba(255,255,255,0.4),0_0_16px_rgba(255,255,255,0.3)]'>Get Home-Safe with SafeDex</h1> 
 
             {/* Call to Action: Button that links to view properties page copied from: https://buttons.ibelick.com*/} 
             <Link 
