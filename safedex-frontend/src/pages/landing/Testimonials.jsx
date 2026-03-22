@@ -40,7 +40,7 @@ export default function Testimonials() {
             <div className="font-sans p-6">
               <p className="font-medium text-sm text-slate-500 mb-4">{t.role}</p>
               <blockquote className="text-sm text-slate-700 mb-4 leading-relaxed">"{t.quote}"</blockquote>
-              <cite className="text-xs text-slate-400">— {t.author}</cite>
+              <cite className="text-xs text-slate-600">— {t.author}</cite>
             </div>
 
           </article>
