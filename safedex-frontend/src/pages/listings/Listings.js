@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPropertiesPage } from '../../services/api/propertyAPI';
+import { normalizeSortField, normalizeSortOrder, sortProperties, filterProperties, paginate } from './ListingsUtils';
 
 export default function Listings() {
     const [allProperties, setAllProperties] = useState([]);
@@ -40,63 +41,9 @@ export default function Listings() {
         }
     };
 
-    const normalizeSortField = (field) => {
-        const validFields = ['price', 'safetyScore', 'date'];
-        return validFields.includes(field) ? field : 'price';
-    };
-
-    const normalizeSortOrder = (order) => (order === 'DESC' ? 'DESC' : 'ASC');
-
-    const sortProperties = (properties) => {
-        const field = normalizeSortField(sortBy);
-        const order = normalizeSortOrder(sortOrder);
-
-        return [...properties].sort((a, b) => {
-            let aValue;
-            let bValue;
-
-            if (field === 'price') {
-                aValue = a.ppm ?? 0;
-                bValue = b.ppm ?? 0;
-            } else if (field === 'safetyScore') {
-                aValue = a.neighbourhood?.safetyScore ?? 0;
-                bValue = b.neighbourhood?.safetyScore ?? 0;
-            } else {
-                const parseDate = (obj) => {
-                    const value = obj?.date || obj?.createdAt || obj?.created_at;
-                    const parsed = value ? Date.parse(value) : NaN;
-                    return Number.isNaN(parsed) ? 0 : parsed;
-                };
-                aValue = parseDate(a);
-                bValue = parseDate(b);
-            }
-
-            if (aValue === bValue) return 0;
-            const comparison = aValue > bValue ? 1 : -1;
-            return order === 'ASC' ? comparison : -comparison;
-        });
-    };
-
     const applyFilters = () => {
-        let filtered = allProperties;
-
-        if (filters.minSafetyScore) {
-            filtered = filtered.filter(property =>
-                property.neighbourhood && property.neighbourhood.safetyScore >= parseInt(filters.minSafetyScore)
-            );
-        }
-
-        if (filters.maxPrice) {
-            filtered = filtered.filter(property => property.ppm <= parseFloat(filters.maxPrice));
-        }
-
-        if (filters.neighbourhood) {
-            filtered = filtered.filter(property =>
-                property.neighbourhood && property.neighbourhood.name.toLowerCase().includes(filters.neighbourhood.toLowerCase())
-            );
-        }
-
-        filtered = sortProperties(filtered);
+        let filtered = filterProperties(allProperties, filters);
+        filtered = sortProperties(filtered, sortBy, sortOrder);
 
         setFilteredProperties(filtered);
         setCurrentPage(1); // Reset to first page when filters change
@@ -130,11 +77,8 @@ export default function Listings() {
     };
 
     // Pagination logic for filtered results
-    const itemsPerPage = 6; // Show more items per page in filtered view
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentProperties = filteredProperties.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+    const itemsPerPage = 6;
+    const { currentItems: currentProperties, totalPages } = paginate(filteredProperties, currentPage, itemsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
