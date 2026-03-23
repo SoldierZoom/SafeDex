@@ -206,7 +206,7 @@ public class NeighbourhoodService {
             result.add(addNeighbourhood(neighbourhood));
         }
         return result;
-    }
+    }*/
 
     //update entries to include boundaries
     public List<Neighbourhood> addBoundaries() throws InterruptedException {
@@ -240,7 +240,7 @@ public class NeighbourhoodService {
             Thread.sleep(500);
         }
         return neighbourhoodRepository.saveAll(result);
-    }*/
+    }
 
     //gets all neighbourhoods in db
     public List<Neighbourhood> getAll() {
