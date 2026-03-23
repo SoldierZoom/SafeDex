@@ -140,7 +140,7 @@ export default function Heatmap() {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         {showCrimeTotal && (
-                            <MarkerClusterGroup chunkedLoading>
+                            <MarkerClusterGroup chunkedLoading showCoverageOnHover={false}>
                                 {neighbourhoods.map((neigh, i) =>(
                                     <div key={i}>
                                         <Polygon
@@ -169,22 +169,24 @@ export default function Heatmap() {
                             <div>
                                 {neighbourhoods.map((neigh, i) => (
                                     <div key={i}>
-                                        {neigh.recentCrimes.forEach((crime, j) => {
-                                            if (crimeOptions[crime.type].show) {
-                                                return (
-                                                    <Circle
-                                                        key={j}
-                                                        center={[crime.latitude, crime.longitude]}
-                                                        pathOptions={{ color: 'red', fillColor: 'orange' }}
-                                                        radius={10}
-                                                    >
-                                                        <Tooltip>
-                                                            <p><strong>Location: </strong>{crime.location}</p>
-                                                            <p><strong>Type: </strong>{crime.type}</p>
-                                                        </Tooltip>
-                                                    </Circle>
-                                                );
-                                            }
+                                        {neigh.recentCrimes.map((crime, j) => {
+                                            return (
+                                                <div key={j}>
+                                                    {crimeOptions[crime.type].show && (
+                                                        <Circle
+                                                            key={j}
+                                                            center={[crime.latitude, crime.longitude]}
+                                                            pathOptions={{ color: 'red', fillColor: 'orange' }}
+                                                            radius={10}
+                                                        >
+                                                            <Tooltip>
+                                                                <p><strong>Location: </strong>{crime.location}</p>
+                                                                <p><strong>Type: </strong>{crime.type}</p>
+                                                            </Tooltip>
+                                                        </Circle>
+                                                    )}
+                                                </div>
+                                            );
                                         })}
                                     </div>
                                 ))}
