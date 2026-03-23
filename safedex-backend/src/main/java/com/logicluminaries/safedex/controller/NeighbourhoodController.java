@@ -26,13 +26,13 @@ public class NeighbourhoodController {
     @PostMapping("/bulk")
     List<Neighbourhood> addNeighbourhoods(@Valid @RequestBody List<Neighbourhood> neighbourhoods) throws InterruptedException {
         return neighbourhoodService.addNeighbourhoods(neighbourhoods);
-    }*/
+    }
 
     //update entries to include boundary points
     @PostMapping("/boundary")
     List<Neighbourhood> addBoundaries() throws InterruptedException {
         return neighbourhoodService.addBoundaries();
-    }
+    }*/
 
         //gets all neighbourhoods in db
     @GetMapping
