@@ -16,9 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PropertyController {
     private final PropertyService propertyService;
-
+    
     //adds property to db
-    @PostMapping
+    /*@PostMapping
     Property addProperty(@Valid @RequestBody Property property) {
         return propertyService.save(property);
     }
@@ -26,7 +26,7 @@ public class PropertyController {
     @PostMapping("/bulk")
     List<Property> addProperties(@Valid @RequestBody List<Property> properties) {
         return propertyService.saveAll(properties);
-    }
+    }*/
 
     //gets page of properties
     @GetMapping

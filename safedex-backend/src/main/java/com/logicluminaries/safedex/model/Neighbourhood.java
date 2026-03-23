@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,9 @@ public class Neighbourhood {
     @NotNull
     @Positive
     private int population;//estimated population
+
+    @ElementCollection
+    private List<LatLng> boundaryPoints;
 
     @ElementCollection
     @CollectionTable(name = "neighbourhood_crime_totals", joinColumns = @JoinColumn(name = "neighbourhood_id"))
