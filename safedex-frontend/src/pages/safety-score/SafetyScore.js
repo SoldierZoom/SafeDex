@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi'; 
 
 // Helper function to label score by color
-function getSafetyColor(score) {
+export function getSafetyColor(score) {
     if (score >= 70) return {color: "#1D9E75", label: "Safe", bg: "#E1F5EE"};
     if (score >= 40) return { color: "#f1ce08", label: "Moderate", bg: "#FAEEDA" };
     return               { color: "#A32D2D", label: "High Risk",bg: "#FCEBEB" };
 }
 
 // Assign colors to crime categories
-function getCategoryColor(label) {
+export function getCategoryColor(label) {
     const colors = {
         "anti-social-behaviour": "#3B8BD4",
         "vehicle-crime":         "#EF9F27",
