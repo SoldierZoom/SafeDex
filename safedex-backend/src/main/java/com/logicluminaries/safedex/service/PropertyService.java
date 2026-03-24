@@ -18,8 +18,9 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private static final int ITEMS_PER_PAGE = 1000; // increase page size to show more properties
 
+    //Functions used to add properties to db
     //adds entry
-    public Property save(Property property) {
+    /*public Property save(Property property) {
         if(property.getNeighbourhood()==null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Neighbourhood is null");
         }
@@ -33,7 +34,7 @@ public class PropertyService {
             }
         }
         return propertyRepository.saveAll(properties);
-    }
+    }*/
 
     //gets page of filtered entries
     public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {

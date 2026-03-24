@@ -1,6 +1,7 @@
 package com.logicluminaries.safedex.service;
 
 import com.logicluminaries.safedex.model.CrimeRecord;
+import com.logicluminaries.safedex.model.LatLng;
 import com.logicluminaries.safedex.model.Neighbourhood;
 import com.logicluminaries.safedex.repository.NeighbourhoodRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ public class NeighbourhoodService {
     private final RestTemplate restTemplate = new RestTemplate();
     private static final int ITEMS_PER_PAGE = 20;
 
-    //helper functions for addNeighbourhood
+    //helper functions for adding neighbourhood entries to db
     //all API call stuff
-    private Neighbourhood getCrimeData(Neighbourhood neighbourhood) throws InterruptedException {
+    /*private Neighbourhood getCrimeData(Neighbourhood neighbourhood) throws InterruptedException {
         double lat = neighbourhood.getLatitude();
         double lng = neighbourhood.getLongitude();
 
@@ -207,6 +208,39 @@ public class NeighbourhoodService {
         return result;
     }
 
+    //update entries to include boundaries
+    public List<Neighbourhood> addBoundaries() throws InterruptedException {
+        List<Neighbourhood> result = getAll();
+        for(Neighbourhood neighbourhood : result) {
+            double lat = neighbourhood.getLatitude();
+            double lng = neighbourhood.getLongitude();
+
+            //finding id neighbourhood in crime api to get neighbourhood boundary and population
+            String locateUrl = String.format(
+                    "https://data.police.uk/api/locate-neighbourhood?q=%f,%f",
+                    lat, lng
+            );
+            Map<String, String> locateResp = restTemplate.getForObject(locateUrl, Map.class);
+            String neighbourhoodId = locateResp.get("neighbourhood");
+            String force = locateResp.get("force");//e.g. west midlands
+            Thread.sleep(500);// so no rate limits
+            //get boundary points
+            String boundaryUrl = String.format(
+                    "https://data.police.uk/api/%s/%s/boundary",
+                    force,
+                    neighbourhoodId
+            );
+            List<Map<String,String>> boundary = restTemplate.getForObject(boundaryUrl, List.class);
+            List<LatLng> points = boundary.stream()
+                    .map(map -> new LatLng(
+                            Double.parseDouble(map.get("latitude")),
+                            Double.parseDouble(map.get("longitude"))
+                            )).toList();
+            neighbourhood.setBoundaryPoints(new ArrayList<>(points));
+            Thread.sleep(500);
+        }
+        return neighbourhoodRepository.saveAll(result);
+    }*/
 
     //gets all neighbourhoods in db
     public List<Neighbourhood> getAll() {
@@ -218,15 +252,5 @@ public class NeighbourhoodService {
         return neighbourhoodRepository.findById(id)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Neighbourhood not found"));
-    }
-    //gets page of recent crimes in neighbourhood
-    public List<CrimeRecord> getRecentCrimesPage(Long id,int pageNum) {
-        List<CrimeRecord> crimes = neighbourhoodRepository.findById(id).get().getRecentCrimes();
-
-        int start = (pageNum - 1) * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, crimes.size());
-
-        List<CrimeRecord> page = crimes.subList(start, end);
-        return page;
     }
 }
