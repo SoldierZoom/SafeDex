@@ -12,7 +12,8 @@ import {
     CircleMarker
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
-import { Filter, MapPin, Cctv } from 'lucide-react';
+import HeatmapLayer from 'react-leaflet-heat-layer';
+import { Filter, House, Cctv, Map } from 'lucide-react';
 
 import 'leaflet/dist/leaflet.css'
 import 'react-leaflet-cluster/dist/assets/MarkerCluster.css'
@@ -24,8 +25,9 @@ export default function Heatmap() {
     const [isLoading, setIsLoading] = useState(true);
 
     // Map Options
+    const [showNeighbourhood, setShowNeighbourhood] = useState(true);
     const [showCrimeTotal, setShowCrimeTotal] = useState(true);
-    const [showCrimePoints, setShowCrimePoints] = useState(false);
+    const [showHeatmap, setShowHeatmap] = useState(false);
 
     useEffect(() => {
         function fetchNeighbourhoods() {
@@ -81,6 +83,21 @@ export default function Heatmap() {
         }));
     }
 
+    const Heatmap = () => {
+        const crimePoints = [];
+        neighbourhoods.forEach(neigh => {
+            neigh.recentCrimes.forEach(crime => {
+                if (crimeOptions[crime.type].show) {
+                    crimePoints.push([crime.latitude, crime.longitude]);
+                }
+            })
+        });
+
+        return (
+            <HeatmapLayer latlngs={crimePoints} />
+        );
+    }
+
     return (
         <div className="relatie p-2">
             <h1 className="my-5 mb-10 text-4xl font-bold">Crime Heatmap</h1>
@@ -93,16 +110,22 @@ export default function Heatmap() {
                     <hr className="my-3 border-2"/>
                     <div className="flex my-4 space-x-3">
                         <button
+                            onClick={() => setShowNeighbourhood(p => !p)}
+                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showNeighbourhood)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
+                        >
+                            <House /> Neighbourhood
+                        </button>
+                        <button
                             onClick={() => setShowCrimeTotal(p => !p)}
                             className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showCrimeTotal)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
                         >
-                            <Cctv /> CrimeTotal
+                            <Cctv /> Total
                         </button>
                         <button
-                            onClick={() => setShowCrimePoints(p => !p)}
-                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showCrimePoints)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
+                            onClick={() => setShowHeatmap(p => !p)}
+                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showHeatmap)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
                         >
-                            <MapPin /> CrimePoints
+                            <Map /> Heatmap
                         </button>
                     </div>
                     <ul className="flex flex-col space-y-2">
@@ -139,35 +162,42 @@ export default function Heatmap() {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        {showCrimeTotal && (
-                            <MarkerClusterGroup chunkedLoading showCoverageOnHover={false}>
-                                {neighbourhoods.map((neigh, i) =>(
-                                    <div key={i}>
+                        {showNeighbourhood && (
+                            <div>
+                                {neighbourhoods.map((neigh, i) => (
+                                    <CircleMarker
+                                        key={i}
+                                        center={[neigh.latitude, neigh.longitude]}
+                                        radius={10}
+                                    >
                                         <Polygon
                                             pathOptions={{ color: 'gray' }}
                                             positions={neigh.boundaryPoints}
                                         />
-                                        <CircleMarker key={i} center={[neigh.latitude, neigh.longitude]} radius={10}>
-                                            <Popup>
-                                                <label className="text-lg font-bond">{neigh.name}</label>
-                                                <hr className="my-1"/>
-                                                <ul>
-                                                    {Object.keys(neigh.crimeTotalsByType).map((k, i) => (
-                                                        <li key={i}>
-                                                            {k}: {neigh.crimeTotalsByType[k]}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </Popup>
-                                            <Tooltip>{neigh.name}</Tooltip>
-                                        </CircleMarker>
-                                    </div>
+                                        <Popup>
+                                            <label className="text-lg font-bond">{neigh.name}</label>
+                                            <hr className="my-1"/>
+                                            <ul>
+                                                {Object.keys(neigh.crimeTotalsByType).map((k, i) => (
+                                                    <li key={i}>
+                                                        {k}: {neigh.crimeTotalsByType[k]}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </Popup>
+                                        <Tooltip>{neigh.name}</Tooltip>
+                                    </CircleMarker>
                                 ))}
-                            </MarkerClusterGroup>
+                            </div>
                         )}
-                        {showCrimePoints && (
-                            <div>
-                                {neighbourhoods.map((neigh, i) => (
+                        {showHeatmap && (<Heatmap />)}
+                        {showCrimeTotal && (
+                            <MarkerClusterGroup
+                                chunkedLoading
+                                animate
+                                showCoverageOnHover={false}
+                            >
+                                {neighbourhoods.map((neigh, i) =>(
                                     <div key={i}>
                                         {neigh.recentCrimes.map((crime, j) => {
                                             return (
@@ -177,7 +207,7 @@ export default function Heatmap() {
                                                             key={j}
                                                             center={[crime.latitude, crime.longitude]}
                                                             pathOptions={{ color: 'red', fillColor: 'orange' }}
-                                                            radius={10}
+                                                            radius={8}
                                                         >
                                                             <Tooltip>
                                                                 <p><strong>Location: </strong>{crime.location}</p>
@@ -190,7 +220,7 @@ export default function Heatmap() {
                                         })}
                                     </div>
                                 ))}
-                            </div>
+                            </MarkerClusterGroup>
                         )}
                     </MapContainer>
                 </div>
