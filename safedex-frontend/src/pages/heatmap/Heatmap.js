@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as neighbourhoodApi from 'services/api/neighbourhoodApi';
-import { processPolygon } from './HeatmapUtils';
+import { processPolygon, displayCrimeType } from './HeatmapUtils';
 
 import {
     MapContainer,
@@ -99,10 +99,10 @@ export default function Heatmap() {
     }
 
     return (
-        <div className="relatie p-2">
-            <h1 className="my-5 mb-10 text-4xl font-bold">Crime Heatmap</h1>
-            <div className="flex h-[80vh] w-full gap-3">
-                <div className="h-full w-[25%] p-3 border-2 rounded-2xl overflow-y-scroll">
+        <div className="container mx-auto px-4 py-8">
+            <h1 className="mb-10 text-4xl font-bold">Crime Heatmap</h1>
+            <div className="flex justify-center h-[80vh] w-full gap-3">
+                <div className="h-full min-w-max w-[25%] p-3 border-2 rounded-2xl overflow-y-scroll">
                     <label className="flex m-2 space-x-2 items-center">
                         <Filter />
                         <h3 className="text-2xl font-bold">Crime Filter</h3>
@@ -134,9 +134,8 @@ export default function Heatmap() {
                                 key={i} 
                                 className="flex mx-1 px-2 text-xl"
                             >
-                                <label className="flex-grow font-semibold text-slate-600">{crime}</label>
+                                <label className="flex-grow font-semibold text-slate-600">{displayCrimeType(crime)}</label>
                                 <div className="flex space-x-3 items-center">
-                                    {/* TODO: Map crime type to crime name and icon display */}
                                     <span className="px-3 bg-slate-300 rounded-3xl">{crimeOptions[crime].count}</span>
                                     <input
                                         id={crime}
@@ -156,7 +155,7 @@ export default function Heatmap() {
                         center={[neighbourhoods[0].latitude, neighbourhoods[0].longitude]}
                         zoom={13}
                         scrollWheelZoom={true}
-                        className="h-[100%] w-[65vw]"
+                        className="h-[100%] w-[60vw]"
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -171,7 +170,7 @@ export default function Heatmap() {
                                         radius={10}
                                     >
                                         <Polygon
-                                            pathOptions={{ color: 'gray' }}
+                                            pathOptions={{ color: 'black' }}
                                             positions={neigh.boundaryPoints}
                                         />
                                         <Popup>
@@ -180,7 +179,7 @@ export default function Heatmap() {
                                             <ul>
                                                 {Object.keys(neigh.crimeTotalsByType).map((k, i) => (
                                                     <li key={i}>
-                                                        {k}: {neigh.crimeTotalsByType[k]}
+                                                        {displayCrimeType(k)}: {neigh.crimeTotalsByType[k]}
                                                     </li>
                                                 ))}
                                             </ul>
@@ -211,7 +210,7 @@ export default function Heatmap() {
                                                         >
                                                             <Tooltip>
                                                                 <p><strong>Location: </strong>{crime.location}</p>
-                                                                <p><strong>Type: </strong>{crime.type}</p>
+                                                                <p><strong>Type: </strong>{displayCrimeType(crime.type)}</p>
                                                             </Tooltip>
                                                         </Circle>
                                                     )}
