@@ -10,9 +10,15 @@ export default function Listings() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [filters, setFilters] = useState({
-        minSafetyScore: '',
+        minPrice: '',
         maxPrice: '',
-        neighbourhood: ''
+        minBedrooms: '',
+        maxBedrooms: '',
+        minBathrooms: '',
+        maxBathrooms: '',
+        houseType: '',
+        minSafetyScore: '',
+        search: ''
     });
     const [sortBy, setSortBy] = useState('price'); // "price", "safetyScore", or "date"
     const [sortOrder, setSortOrder] = useState('ASC'); // "ASC" or "DESC"
@@ -70,9 +76,15 @@ export default function Listings() {
 
     const clearFilters = () => {
         setFilters({
-            minSafetyScore: '',
+            minPrice: '',
             maxPrice: '',
-            neighbourhood: ''
+            minBedrooms: '',
+            maxBedrooms: '',
+            minBathrooms: '',
+            maxBathrooms: '',
+            houseType: '',
+            minSafetyScore: '',
+            search: ''
         });
     };
 
@@ -117,25 +129,37 @@ export default function Listings() {
             {/* Filters */}
             <div className="bg-gray-50 p-6 rounded-lg mb-8">
                 <h2 className="text-xl font-semibold mb-4">Filter Properties</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Search by Postcode or Location
+                    </label>
+                    <input
+                        type="text"
+                        name="search"
+                        value={filters.search}
+                        onChange={handleFilterChange}
+                        placeholder="e.g., SW1A or Baker Street or Downtown"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Minimum Safety Score
+                            Min Price (£/month)
                         </label>
                         <input
                             type="number"
-                            name="minSafetyScore"
-                            value={filters.minSafetyScore}
+                            name="minPrice"
+                            value={filters.minPrice}
                             onChange={handleFilterChange}
-                            placeholder="e.g., 70"
+                            placeholder="e.g., 500"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             min="0"
-                            max="100"
                         />
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Maximum Price (£/month)
+                            Max Price (£/month)
                         </label>
                         <input
                             type="number"
@@ -149,15 +173,90 @@ export default function Listings() {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Neighbourhood
+                            Min Bedrooms
                         </label>
                         <input
-                            type="text"
-                            name="neighbourhood"
-                            value={filters.neighbourhood}
+                            type="number"
+                            name="minBedrooms"
+                            value={filters.minBedrooms}
                             onChange={handleFilterChange}
-                            placeholder="e.g., Downtown"
+                            placeholder="e.g., 1"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Max Bedrooms
+                        </label>
+                        <input
+                            type="number"
+                            name="maxBedrooms"
+                            value={filters.maxBedrooms}
+                            onChange={handleFilterChange}
+                            placeholder="e.g., 5"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Min Bathrooms
+                        </label>
+                        <input
+                            type="number"
+                            name="minBathrooms"
+                            value={filters.minBathrooms}
+                            onChange={handleFilterChange}
+                            placeholder="e.g., 1"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Max Bathrooms
+                        </label>
+                        <input
+                            type="number"
+                            name="maxBathrooms"
+                            value={filters.maxBathrooms}
+                            onChange={handleFilterChange}
+                            placeholder="e.g., 3"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            House Type
+                        </label>
+                        <select
+                            name="houseType"
+                            value={filters.houseType}
+                            onChange={handleFilterChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">All Types</option>
+                            <option value="DETACHED">Detached</option>
+                            <option value="SEMI_DETACHED">Semi Detached</option>
+                            <option value="FLAT">Flat</option>
+                            <option value="TERRACED">Terraced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Min Safety Score
+                        </label>
+                        <input
+                            type="number"
+                            name="minSafetyScore"
+                            value={filters.minSafetyScore}
+                            onChange={handleFilterChange}
+                            placeholder="e.g., 50"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="0"
+                            max="100"
                         />
                     </div>
                 </div>
