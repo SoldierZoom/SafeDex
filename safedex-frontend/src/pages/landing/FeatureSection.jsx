@@ -10,7 +10,7 @@ const features = [
         href="https://data.police.uk" 
         target="_blank" 
         rel="noreferrer"
-        className="font-medium text-blue-500 hover:underline"
+        className="font-medium text-blue-700 hover:underline"
       >
         data.police.uk
       </a>
@@ -41,10 +41,10 @@ export default function FeatureSection() {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pt-4 lg:pr-8">
             <div className="lg:max-w-lg font-mono">
-              <h2 className="font-mono text-2xl font-semibold text-black"> OUR SAFEDEX STRATEGY </h2>
+              <h2 className="font-mono text-2xl font-semibold text-black dark:text-white hc:text-hc-text"> OUR SAFEDEX STRATEGY </h2>
 
                 {/* TAKEN FROM A YOUTUBE VIDEO I LOST THE LINK :( */}
-              <p className="relative mt-2 text-5xl font-semibold tracking-tight text-slate-900 sm:text-6xl">
+              <p className="relative mt-2 text-5xl font-semibold tracking-tight text-black sm:text-6xl dark:text-white hc:text-hc-text">
                     The{' '}
                     <ReactTyped
                         strings={['safe','SafeDex']}
@@ -52,18 +52,18 @@ export default function FeatureSection() {
                         backSpeed={120}
                         backDelay={5000}
                         loop
-                        className="text-black"
+                        className="text-black dark:text-white hc:text-hc-text"
                     />
                     <br />way to find homes.
                 </p>
     
-              <p className="mt-6 text-xl text-slate-600">
+              <p className="mt-6 text-xl text-slate-900 dark:text-slate-100 hc:text-hc-text">
                 SafeDex integrates real UK crime data into property searching so you can make fully-informed decisions about where you live.
               </p>
-              <dl className="mt-10 max-w-xl space-y-8 text-xl text-slate-600 lg:max-w-none">
+              <dl className="mt-10 max-w-xl space-y-8 text-xl text-slate-800 lg:max-w-none dark:text-slate-300 hc:text-hc-text">
                 {features.map((feature) => (
                   <div key={feature.name} className="relative ">
-                    <dt className="inline font-semibold text-slate-900">
+                    <dt className="inline font-semibold text-slate-900 dark:text-white hc:text-hc-text">
                       {feature.name}
                     </dt>{' '}
                     <dd className="inline">{feature.description}</dd>

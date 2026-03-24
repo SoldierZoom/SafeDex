@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function FooterSection() {
   return (
-    <footer className='w-full bg-black py-12 px-8'>
+    <footer className='w-full bg-black py-12 px-8 hc:border-t hc:border-hc-border'>
       
       <div className='max-w-6xl mx-auto'>
 
@@ -16,17 +16,17 @@ export default function FooterSection() {
           {/* Links */}
           <nav aria-label="Footer navigation">
             <div className='flex gap-8'>
-              <Link to='/' tabIndex={0}   className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black'>Home</Link>
-              <Link to='/listings' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black'>Listings</Link>
-              <Link to='/favourite' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black'>Favourites</Link>
-              <Link to='/heatmap' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black'>Map</Link>
+              <Link to='/' tabIndex={0}   className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black hc:text-hc-text'>Home</Link>
+              <Link to='/listings' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black hc:text-hc-text'>Listings</Link>
+              <Link to='/favourite' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black hc:text-hc-text'>Favourites</Link>
+              <Link to='/heatmap' tabIndex={0} className='font-mono text-slate-400 hover:text-white text-sm transition focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black hc:text-hc-text'>Map</Link>
             </div>
           </nav>
 
         </div>
 
-        <div className='border-t border-slate-800 my-8'></div>
-        <p className=' flex justify-center text-slate-400 text-sm font-mono'> © SafeDex 2026</p>
+        <div className='border-t border-slate-800 my-8 hc:border-hc-border'></div>
+        <p className=' flex justify-center text-slate-400 text-sm font-mono hc:text-hc-text'> © SafeDex 2026</p>
         
       </div>
     </footer>

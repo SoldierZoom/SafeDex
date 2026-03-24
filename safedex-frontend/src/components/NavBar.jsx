@@ -34,7 +34,7 @@ export default function NavBar() {
   return (
     <nav
       aria-label="Main navigation"
-      className={`fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10 transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}
+      className={`fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10 hc:border-hc-border transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}
     >
       <div className="px-8">
         <div className="flex items-center justify-between h-16">
@@ -50,11 +50,11 @@ export default function NavBar() {
               <Link
                 key={path}
                 to={path}
-                tabIndex={0}
+                //tabIndex={0}
                 className={`font-mono text-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-white px-2 py-1 ${
                   isInPath(path)
-                    ? 'text-white font-semibold'
-                    : 'text-white/70 hover:text-white'
+                    ? 'text-white font-semibold hc:text-hc-text'
+                    : 'text-white/70 hover:text-white hc:text-hc-text hc:hover:text-hc-text'
                 }`}
               >
                 {name}
