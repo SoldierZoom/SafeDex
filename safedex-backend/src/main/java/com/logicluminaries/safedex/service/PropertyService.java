@@ -2,6 +2,7 @@ package com.logicluminaries.safedex.service;
 
 import com.logicluminaries.safedex.enums.HouseType;
 import com.logicluminaries.safedex.enums.OrderType;
+import com.logicluminaries.safedex.model.PagedProperties;
 import com.logicluminaries.safedex.model.Property;
 import com.logicluminaries.safedex.repository.PropertyRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PropertyService {
     private final PropertyRepository propertyRepository;
-    private static final int ITEMS_PER_PAGE = 1000; // increase page size to show more properties
+    private static final int ITEMS_PER_PAGE = 6; // changed back so logic stays in backend
 
     //Functions used to add properties to db
     //adds entry
@@ -37,7 +38,7 @@ public class PropertyService {
     }*/
 
     //gets page of filtered entries
-    public List<Property> getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
+    public PagedProperties getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
         //adjust sortBy fields
         String actualSortField;
         if (sortBy.equals("safetyScore")) {
@@ -109,9 +110,13 @@ public class PropertyService {
         //get page
         int start = (pageNum - 1) * ITEMS_PER_PAGE;
         int end = Math.min(start + ITEMS_PER_PAGE, all.size());
+        int pages = (all.size()) / ITEMS_PER_PAGE;
+        if(all.size() % ITEMS_PER_PAGE != 0) {
+            pages++;
+        }
 
         List<Property> page = all.subList(start, end);
-        return page;
+        return new PagedProperties(pages,page);
     }
 
     //gets specific entry by id

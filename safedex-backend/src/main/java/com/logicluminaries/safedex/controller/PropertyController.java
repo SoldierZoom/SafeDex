@@ -2,6 +2,7 @@ package com.logicluminaries.safedex.controller;
 
 import com.logicluminaries.safedex.enums.HouseType;
 import com.logicluminaries.safedex.enums.OrderType;
+import com.logicluminaries.safedex.model.PagedProperties;
 import com.logicluminaries.safedex.model.Property;
 import com.logicluminaries.safedex.service.PropertyService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class PropertyController {
 
     //gets page of properties
     @GetMapping
-    public List<Property> getProperties(
+    public PagedProperties getProperties(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String query,
             @RequestParam(required = false) Integer minPrice,
