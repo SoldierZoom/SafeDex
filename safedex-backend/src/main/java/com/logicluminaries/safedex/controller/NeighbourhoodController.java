@@ -46,10 +46,4 @@ public class NeighbourhoodController {
     Neighbourhood getNeighbourhoodById(@PathVariable Long id) {
         return neighbourhoodService.getById(id);
     }
-
-    //gets latest month crimes for a specific neighbourhood
-    @GetMapping("/{id}/recentCrimes")
-    List<CrimeRecord> getRecentCrimes(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
-        return neighbourhoodService.getRecentCrimesPage(id, page);
-    }
 }

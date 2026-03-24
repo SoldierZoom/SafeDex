@@ -253,12 +253,4 @@ public class NeighbourhoodService {
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Neighbourhood not found"));
     }
-
-    //gets page of recent crimes in neighbourhood
-    public List<CrimeRecord> getRecentCrimesPage(Long id, int pageNum) {
-        List<CrimeRecord> crimes = neighbourhoodRepository.findById(id).get().getRecentCrimes();
-        int start = (pageNum - 1) * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, crimes.size());
-        return crimes.subList(start, end);
-    }
 }
