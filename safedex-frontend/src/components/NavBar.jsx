@@ -1,6 +1,5 @@
 import routes from "../lib/routes";
 import { Link, useLocation } from "react-router-dom";
-import ThemeToggle from "./ThemeToggle";
 
 export default function NavBar() {
   const location = useLocation();
@@ -31,9 +30,6 @@ export default function NavBar() {
           </Link>
         </div>
       ))}
-      <div className="ml-auto">
-        <ThemeToggle />
-      </div>
     </nav>
   );
 }
