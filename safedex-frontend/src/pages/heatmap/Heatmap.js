@@ -41,19 +41,23 @@ export default function Heatmap() {
                     setIsLoading(false);
 
                     const crimeTypes = {};
-                    data.forEach(h => {
-                        const keys = Object.keys(h.crimeTotalsByType);
-                        keys.forEach(k => {
-                            if (Object.keys(crimeTypes).includes(k)) {
-                                crimeTypes[k].count += h.crimeTotalsByType[k];
-                            } else {
-                                crimeTypes[k] = {
-                                    count: h.crimeTotalsByType[k],
-                                    show: true,
-                                }
+                    if (data) {
+                        data.forEach(h => {
+                            const keys = Object.keys(h.crimeTotalsByType);
+                            if (keys) {
+                                keys.forEach(k => {
+                                    if (Object.keys(crimeTypes).includes(k)) {
+                                        crimeTypes[k].count += h.crimeTotalsByType[k];
+                                    } else {
+                                        crimeTypes[k] = {
+                                            count: h.crimeTotalsByType[k],
+                                            show: true,
+                                        }
+                                    }
+                                });
                             }
                         });
-                    });
+                    }
 
                     setCrimeOptions({...crimeTypes});
                 })
@@ -64,9 +68,6 @@ export default function Heatmap() {
 
         fetchNeighbourhoods();
     }, []);
-
-
-    console.log({ neighbourhoods, crimeOptions });
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -86,11 +87,13 @@ export default function Heatmap() {
     const Heatmap = () => {
         const crimePoints = [];
         neighbourhoods.forEach(neigh => {
-            neigh.recentCrimes.forEach(crime => {
-                if (crimeOptions[crime.type].show) {
-                    crimePoints.push([crime.latitude, crime.longitude]);
-                }
-            })
+            if (neigh.recentCrimes) {
+                neigh.recentCrimes.forEach(crime => {
+                    if (crimeOptions[crime.type].show) {
+                        crimePoints.push([crime.latitude, crime.longitude]);
+                    }
+                })
+            }
         });
 
         return (

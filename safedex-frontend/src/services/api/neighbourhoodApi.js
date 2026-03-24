@@ -4,7 +4,6 @@ const basePath = "neighbourhoods";
 
 export function getAllNeighbourhoods() {
     let url = Api.buildApiUrl(`${basePath}`);
-    console.log(url);
     return Api.getData(url);
 }
 

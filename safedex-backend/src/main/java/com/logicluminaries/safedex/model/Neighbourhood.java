@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-<<<<<<< HEAD
+
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-=======
->>>>>>> baaae2f (Increase property page size)
 
 import java.util.HashMap;
 import java.util.List;
