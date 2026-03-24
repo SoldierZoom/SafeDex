@@ -15,7 +15,7 @@ export default function Listings() {
         maxBedrooms: '',
         minBathrooms: '',
         maxBathrooms: '',
-        houseType: '',
+        houseType: [],
         minSafetyScore: '',
         search: ''
     });
@@ -41,7 +41,7 @@ export default function Listings() {
                 filters.maxBedrooms ? parseInt(filters.maxBedrooms) : null,
                 filters.minBathrooms ? parseInt(filters.minBathrooms) : null,
                 filters.maxBathrooms ? parseInt(filters.maxBathrooms) : null,
-                filters.houseType ? [filters.houseType] : null,
+                filters.houseType.length > 0 ? filters.houseType : null,
                 sortBy,
                 sortOrder
             );
@@ -65,6 +65,17 @@ export default function Listings() {
         setCurrentPage(1);
     };
 
+    const handleHouseTypeChange = (e) => {
+        const { value, checked } = e.target;
+        setFilters(prev => ({
+            ...prev,
+            houseType: checked
+                ? [...prev.houseType, value]
+                : prev.houseType.filter(t => t !== value)
+        }));
+        setCurrentPage(1);
+    };
+
     const handleSortChange = (e) => {
         const { name, value } = e.target;
         if (name === 'sortBy') {
@@ -84,7 +95,7 @@ export default function Listings() {
             maxBedrooms: '',
             minBathrooms: '',
             maxBathrooms: '',
-            houseType: '',
+            houseType: [],
             minSafetyScore: '',
             search: ''
         });
@@ -230,18 +241,20 @@ export default function Listings() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             House Type
                         </label>
-                        <select
-                            name="houseType"
-                            value={filters.houseType}
-                            onChange={handleFilterChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">All Types</option>
-                            <option value="DETACHED">Detached</option>
-                            <option value="SEMI_DETACHED">Semi Detached</option>
-                            <option value="FLAT">Flat</option>
-                            <option value="TERRACED">Terraced</option>
-                        </select>
+                        <div className="space-y-1 mt-1">
+                            {[{ value: 'DETACHED', label: 'Detached' }, { value: 'SEMI_DETACHED', label: 'Semi Detached' }, { value: 'FLAT', label: 'Flat' }, { value: 'TERRACED', label: 'Terraced' }].map(type => (
+                                <label key={type.value} className="flex items-center space-x-2 text-sm text-gray-700">
+                                    <input
+                                        type="checkbox"
+                                        value={type.value}
+                                        checked={filters.houseType.includes(type.value)}
+                                        onChange={handleHouseTypeChange}
+                                        className="rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <span>{type.label}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
