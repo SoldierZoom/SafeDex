@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi';
 import { getRecentCrimes } from '../../services/api/neighbourhoodApi';
@@ -33,6 +33,7 @@ function getCategoryColor(label) {
 
 export default function SafetyScorePage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [neighbourhood, setNeighbourhood] = useState(null);
     const [recentCrimes, setRecentCrimes] = useState([]);
     const [page, setPage] = useState(1);
@@ -125,7 +126,8 @@ export default function SafetyScorePage() {
                     {visibleCrimes.map((crime) => (
                         <div
                             key={crime.id}
-                            className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100"
+                            tabIndex={0}
+                            className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100 focus:outline-2 focus:outline-blue-500"
                         >
                             {/* colour dot matching crime type */}
                             <div
@@ -150,7 +152,7 @@ export default function SafetyScorePage() {
                 {/* Pagination buttons */}
                 <div className="flex items-center justify-between mt-4">
                     <button
-                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30"
+                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30 focus:outline focus:outline-2 focus:outline-blue-500"
                         onClick={() => setPage(p => p - 1)}
                         disabled={page === 1}
                     >
@@ -158,13 +160,22 @@ export default function SafetyScorePage() {
                     </button>
                     <span className="text-sm">Page {page}</span>
                     <button
-                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30"
+                        className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30 focus:outline focus:outline-2 focus:outline-blue-500"
                         onClick={() => setPage(p => p + 1)}
                         disabled={recentCrimes.length === 0}
                     >
                         Next
                     </button>
                 </div>
+            </div>
+
+            {/* Back button */}
+            <div className="flex justify-start mt-4">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="text-lg bg-gray-300 px-4 py-2 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold focus:outline focus:outline-2 focus:outline-blue-500">
+                    Back
+                </button>
             </div>
         </div>
     );
