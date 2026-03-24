@@ -1,12 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi';
-import { getRecentCrimes } from '../../services/api/neighbourhoodApi';
+import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi'; 
 
 // Helper function to label score by color
 function getSafetyColor(score) {
-    if (score >= 75) return {color: "#1D9E75", label: "Safe", bg: "#E1F5EE"};
-    if (score >= 50) return { color: "#BA7517", label: "Moderate", bg: "#FAEEDA" };
+    if (score >= 70) return {color: "#1D9E75", label: "Safe", bg: "#E1F5EE"};
+    if (score >= 40) return { color: "#f1ce08", label: "Moderate", bg: "#FAEEDA" };
     return               { color: "#A32D2D", label: "High Risk",bg: "#FCEBEB" };
 }
 
@@ -35,7 +34,6 @@ export default function SafetyScorePage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [neighbourhood, setNeighbourhood] = useState(null);
-    const [recentCrimes, setRecentCrimes] = useState([]);
     const [page, setPage] = useState(1);
     const [error, setError] = useState(null);
 
@@ -44,11 +42,6 @@ export default function SafetyScorePage() {
             .then(data => setNeighbourhood(data))
             .catch(() => setError("Failed to load neighbourhood data. Please try again."))
     }, [id])
-
-    useEffect(() => {
-        getRecentCrimes(id, page)
-            .then(data => setRecentCrimes(data))
-    }, [id, page])
 
     if (!neighbourhood) return (
         <div className="flex items-center justify-center h-64">
@@ -77,7 +70,14 @@ export default function SafetyScorePage() {
         }));
     const total = categories.reduce((sum, cat) => sum + cat.count, 0);
 
-    const visibleCrimes = recentCrimes;
+    const CRIMES_PER_PAGE = 15;
+    const allCrimes = neighbourhood.recentCrimes || [];
+    const totalPages = Math.ceil(allCrimes.length / CRIMES_PER_PAGE);
+    const visibleCrimes = allCrimes.slice(
+        (page - 1) * CRIMES_PER_PAGE,
+        page * CRIMES_PER_PAGE
+    );
+
 
     return (
         <div className="container mx-auto px-4 py-4">
@@ -181,7 +181,7 @@ export default function SafetyScorePage() {
                     <button
                         className="text-sm px-3 py-1 rounded-lg border border-slate-200 disabled:opacity-30 focus:outline focus:outline-2 focus:outline-blue-500"
                         onClick={() => setPage(p => p + 1)}
-                        disabled={recentCrimes.length === 0}
+                        disabled={page >= totalPages}
                     >
                         Next
                     </button>
@@ -189,7 +189,7 @@ export default function SafetyScorePage() {
             </div>
 
             {/* Back button */}
-            <div className="flex justify-start mt-4">
+            <div className="flex justify-end mt-4">
                 <button
                     onClick={() => navigate(-1)}
                     className="text-lg bg-gray-300 px-4 py-2 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold focus:outline focus:outline-2 focus:outline-blue-500">
