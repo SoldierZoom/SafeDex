@@ -37,10 +37,12 @@ export default function SafetyScorePage() {
     const [neighbourhood, setNeighbourhood] = useState(null);
     const [recentCrimes, setRecentCrimes] = useState([]);
     const [page, setPage] = useState(1);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         getNeighbourhoodById(id)
             .then(data => setNeighbourhood(data))
+            .catch(() => setError("Failed to load neighbourhood data. Please try again."))
     }, [id])
 
     useEffect(() => {
@@ -48,7 +50,24 @@ export default function SafetyScorePage() {
             .then(data => setRecentCrimes(data))
     }, [id, page])
 
-    if (!neighbourhood) return <p className="p-6">Loading...</p>
+    if (!neighbourhood) return (
+        <div className="flex items-center justify-center h-64">
+            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"/>
+        </div>
+    );
+
+    if (error) return (
+        <div className="flex flex-col items-center justify-center h-64 gap-4">
+            <p className="text-red-500 font-semibold text-lg">{error}</p>
+            <button
+                onClick={() => window.location.reload()}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            >
+                Try again
+            </button>
+        </div>
+    );
+    
     const { color, label, bg } = getSafetyColor(neighbourhood.safetyScore);
     const categories = Object.entries(neighbourhood.crimeTotalsByType)
         .map(([crimeLabel, count]) => ({
