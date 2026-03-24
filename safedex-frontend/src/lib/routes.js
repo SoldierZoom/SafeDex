@@ -4,6 +4,7 @@ import {
     FavouritePage,
     HeatmapPage,
     SafetyScorePage,
+    IndividualListingPage,
 } from '../pages';
 
 import {
@@ -44,6 +45,11 @@ const routes = [
         component: <SafetyScorePage />,
         icon: null,
     }
+        name: null,
+        path: '/listings/:id',
+        component: <IndividualListingPage />,
+        icon: null,
+    },
 ];
 
 export default routes;
