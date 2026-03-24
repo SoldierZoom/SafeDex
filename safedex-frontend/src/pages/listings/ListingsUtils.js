@@ -40,20 +40,46 @@ export const sortProperties = (properties, sortBy, sortOrder) => {
 export const filterProperties = (properties, filters) => {
     let filtered = properties;
 
-    if (filters.minSafetyScore) {
-        filtered = filtered.filter(property =>
-            property.neighbourhood && property.neighbourhood.safetyScore >= parseInt(filters.minSafetyScore)
-        );
+    if (filters.minPrice) {
+        filtered = filtered.filter(property => property.ppm >= parseFloat(filters.minPrice));
     }
 
     if (filters.maxPrice) {
         filtered = filtered.filter(property => property.ppm <= parseFloat(filters.maxPrice));
     }
 
-    if (filters.neighbourhood) {
-        filtered = filtered.filter(property =>
-            property.neighbourhood && property.neighbourhood.name.toLowerCase().includes(filters.neighbourhood.toLowerCase())
-        );
+    if (filters.minBedrooms) {
+        filtered = filtered.filter(property => property.bedrooms >= parseInt(filters.minBedrooms));
+    }
+
+    if (filters.maxBedrooms) {
+        filtered = filtered.filter(property => property.bedrooms <= parseInt(filters.maxBedrooms));
+    }
+
+    if (filters.minBathrooms) {
+        filtered = filtered.filter(property => property.bathrooms >= parseInt(filters.minBathrooms));
+    }
+
+    if (filters.maxBathrooms) {
+        filtered = filtered.filter(property => property.bathrooms <= parseInt(filters.maxBathrooms));
+    }
+
+    if (filters.houseType) {
+        filtered = filtered.filter(property => property.type === filters.houseType);
+    }
+
+    if (filters.minSafetyScore) {
+        filtered = filtered.filter(property => (property.neighbourhood?.safetyScore ?? 0) >= parseFloat(filters.minSafetyScore));
+    }
+
+    if (filters.search) {
+        const term = filters.search.toLowerCase();
+        filtered = filtered.filter(property => {
+            const postcode = (property.postcode || '').toLowerCase();
+            const road = (property.road || '').toLowerCase();
+            const neighbourhood = (property.neighbourhood?.name || '').toLowerCase();
+            return postcode.includes(term) || road.includes(term) || neighbourhood.includes(term);
+        });
     }
 
     return filtered;
