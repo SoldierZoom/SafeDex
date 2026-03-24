@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 
 export default function FavouritesPage({ favourites = [], onDeleteFavourite}) {
@@ -62,3 +63,11 @@ export default function FavouritesPage({ favourites = [], onDeleteFavourite}) {
 }
 
 }
+=======
+import "./Favourite.css";
+export default function Favourite() {
+    return <h1>This is the favourite listing page</h1>;
+}
+
+
+>>>>>>> origin/feature/propertyListings
