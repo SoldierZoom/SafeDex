@@ -61,4 +61,5 @@ public class Neighbourhood {
     public void setCrimeTotalsByType(Map<String, Integer> crimeTotalsByType) { this.crimeTotalsByType = crimeTotalsByType; }
     public List<CrimeRecord> getRecentCrimes() { return recentCrimes; }
     public void setRecentCrimes(List<CrimeRecord> recentCrimes) { this.recentCrimes = recentCrimes; }
+    public Long getId() { return id; }
 }

@@ -3,7 +3,6 @@ import {
     ListingsPage,
     FavouritePage,
     HeatmapPage,
-    SafetyScorePage,
     IndividualListingPage,
 } from '../pages';
 
@@ -40,11 +39,6 @@ const routes = [
         icon: <Map className="inline text-slate-700" />,
     },
     {
-        name: 'Safety Score',
-        path: '/neighbourhood/:id',
-        component: <SafetyScorePage />,
-        icon: null,
-    }
         name: null,
         path: '/listings/:id',
         component: <IndividualListingPage />,

@@ -60,7 +60,7 @@ export default function SafetyScorePage() {
     const visibleCrimes = recentCrimes;
 
     return (
-        <div className="max-w-2x1 mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-4">
 
             {/* Neighbourhood header */}
             <div className="mb-6">
@@ -73,7 +73,7 @@ export default function SafetyScorePage() {
             </div>
 
             {/* Overall safety score card */}
-            <div className="rounded-x1 border  p-6 mb-6 flex items-center gap-6">
+            <div className="rounded-xl border p-4 mb-6 flex flex-wrap items-center gap-6">
                 <div className="rounded-full flex items-center justify-center shrink-0" style={{ width: 80, height: 80, background: bg, border: `3px solid ${color}` }}>
                     <span style={{ color, fontSize: 24, fontWeight: 600 }}>
                         {neighbourhood.safetyScore}
@@ -91,7 +91,7 @@ export default function SafetyScorePage() {
             </div>
 
             { /* Crime breakdown bars */}
-            <div className="rounded-x1 border p-6 mb-6">
+            <div className="rounded-x1 border p-4 mb-6 overflow-hidden">
                 <h2 className="text-base font-semibold mb-4">Crime breakdown - past year</h2>
                 <div className="space-y-3">
                     {categories.map((cat) => {
@@ -113,7 +113,7 @@ export default function SafetyScorePage() {
             </div>
 
             {/* Recent crimes list - latest month */}
-            <div className="rounded-xl border border-slate-200 p-6 mb-6">
+            <div className="rounded-xl border border-slate-200 p-4 mb-6 overflow-x-auto">
                 <h2 className="text-base font-semibold mb-4">
                     Recent crimes — latest month
                     <span className="font-normal text-sm ml-2">

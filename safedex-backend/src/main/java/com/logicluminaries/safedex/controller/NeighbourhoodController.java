@@ -1,5 +1,6 @@
 package com.logicluminaries.safedex.controller;
 
+import com.logicluminaries.safedex.model.CrimeRecord;
 import com.logicluminaries.safedex.model.Neighbourhood;
 import com.logicluminaries.safedex.service.NeighbourhoodService;
 import jakarta.validation.Valid;
@@ -44,5 +45,11 @@ public class NeighbourhoodController {
     @GetMapping("/{id}")
     Neighbourhood getNeighbourhoodById(@PathVariable Long id) {
         return neighbourhoodService.getById(id);
+    }
+
+    //gets latest month crimes for a specific neighbourhood
+    @GetMapping("/{id}/recentCrimes")
+    List<CrimeRecord> getRecentCrimes(@PathVariable Long id, @RequestParam(defaultValue = "1") int page) {
+        return neighbourhoodService.getRecentCrimesPage(id, page);
     }
 }
