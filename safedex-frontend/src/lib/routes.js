@@ -3,7 +3,11 @@ import {
     ListingsPage,
     FavouritePage,
     HeatmapPage,
+<<<<<<< HEAD
     SafetyScorePage,
+=======
+    IndividualListingPage,
+>>>>>>> c2ca0c3a855d44057a58edac8f393e576773ea9c
 } from '../pages';
 
 import {
@@ -44,6 +48,11 @@ const routes = [
         component: <SafetyScorePage />,
         icon: null,
     }
+        name: null,
+        path: '/listings/:id',
+        component: <IndividualListingPage />,
+        icon: null,
+    },
 ];
 
 export default routes;
