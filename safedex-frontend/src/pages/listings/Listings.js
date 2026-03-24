@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPropertiesPage } from '../../services/api/propertyAPI';
-import { normalizeSortField, normalizeSortOrder, sortProperties, filterProperties, paginate } from './ListingsUtils';
 
 export default function Listings() {
-    const [allProperties, setAllProperties] = useState([]);
-    const [filteredProperties, setFilteredProperties] = useState([]);
+    const [properties, setProperties] = useState([]);
+    const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,24 +19,34 @@ export default function Listings() {
         minSafetyScore: '',
         search: ''
     });
-    const [sortBy, setSortBy] = useState('price'); // "price", "safetyScore", or "date"
-    const [sortOrder, setSortOrder] = useState('ASC'); // "ASC" or "DESC"
+    const [sortBy, setSortBy] = useState('price');
+    const [sortOrder, setSortOrder] = useState('ASC');
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchAllProperties();
-    }, []);
+        fetchProperties();
+    }, [currentPage, filters, sortBy, sortOrder]);
 
-    useEffect(() => {
-        applyFilters();
-    }, [allProperties, filters, sortBy, sortOrder]);
-
-    const fetchAllProperties = async () => {
+    const fetchProperties = async () => {
         try {
             setLoading(true);
-            const data = await getPropertiesPage(1, null, null, null, null, null, null, null, null, null, 'price', 'ASC');
-            setAllProperties(data);
+            const data = await getPropertiesPage(
+                currentPage,
+                filters.search || null,
+                filters.minPrice ? parseInt(filters.minPrice) : null,
+                filters.maxPrice ? parseInt(filters.maxPrice) : null,
+                filters.minSafetyScore ? parseInt(filters.minSafetyScore) : null,
+                filters.minBedrooms ? parseInt(filters.minBedrooms) : null,
+                filters.maxBedrooms ? parseInt(filters.maxBedrooms) : null,
+                filters.minBathrooms ? parseInt(filters.minBathrooms) : null,
+                filters.maxBathrooms ? parseInt(filters.maxBathrooms) : null,
+                filters.houseType ? [filters.houseType] : null,
+                sortBy,
+                sortOrder
+            );
+            setProperties(data.properties || data);
+            setTotalPages(data.totalPages || 1);
             setError(null);
         } catch (err) {
             setError('Failed to load properties');
@@ -47,31 +56,24 @@ export default function Listings() {
         }
     };
 
-    const applyFilters = () => {
-        let filtered = filterProperties(allProperties, filters);
-        filtered = sortProperties(filtered, sortBy, sortOrder);
-
-        setFilteredProperties(filtered);
-        setCurrentPage(1); // Reset to first page when filters change
-    };
-
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setFilters(prev => ({
             ...prev,
             [name]: value
         }));
+        setCurrentPage(1);
     };
 
     const handleSortChange = (e) => {
         const { name, value } = e.target;
         if (name === 'sortBy') {
             setSortBy(value);
-            return;
         }
         if (name === 'sortOrder') {
             setSortOrder(value);
         }
+        setCurrentPage(1);
     };
 
     const clearFilters = () => {
@@ -86,11 +88,8 @@ export default function Listings() {
             minSafetyScore: '',
             search: ''
         });
+        setCurrentPage(1);
     };
-
-    // Pagination logic for filtered results
-    const itemsPerPage = 6;
-    const { currentItems: currentProperties, totalPages } = paginate(filteredProperties, currentPage, itemsPerPage);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -305,17 +304,17 @@ export default function Listings() {
 
             {/* Results count */}
             <div className="mb-4 text-gray-600">
-                Showing {filteredProperties.length} properties
+                Showing {properties.length} properties
             </div>
 
-            {currentProperties.length === 0 ? (
+            {properties.length === 0 ? (
                 <div className="text-center text-gray-500">
                     No properties match your filters.
                 </div>
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        {currentProperties.map((property) => (
+                        {properties.map((property) => (
                             <div key={property.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
                                 <h2 className="text-xl font-semibold mb-2">{property.name}</h2>
                                 <div className="text-2xl font-bold text-green-600 mb-2">
