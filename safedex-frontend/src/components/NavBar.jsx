@@ -46,7 +46,9 @@ export default function NavBar() {
 
           {/* Nav links */}
           <div className="flex items-center gap-8">
-            {routes.map(({ name, path }) => (
+            {routes
+            .filter(({ name }) => name)
+            .map(({ name, path }) => (
               <Link
                 key={path}
                 to={path}
