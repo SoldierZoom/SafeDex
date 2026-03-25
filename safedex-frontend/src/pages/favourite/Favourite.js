@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function FavouritesPage({ favourites = [], onDeleteFavourite}) {
+export default function FavouritePage({ favourites = [], onDeleteFavourite}) {
 
     // No favourites selected by user yet
     if (!favourites || favourites.length === 0) {
