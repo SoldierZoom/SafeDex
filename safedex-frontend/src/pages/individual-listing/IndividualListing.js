@@ -49,7 +49,7 @@ export default function IndividualListing({addFavourite}) {
             <h1 className = "mt-3 text-3xl">Listing Not Found</h1>
             <button 
             onClick={() => navigate('/listings')}
-            className="mt-5 text-lg bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200">
+            className="mt-5 text-lg bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 dark:bg-slate-800 hc:bg-red-600">
                 Return to Listings Search
             </button>
         </div>);
@@ -82,10 +82,12 @@ export default function IndividualListing({addFavourite}) {
                 <div className="mb-4 mt-2 flex items-center justify-center gap-4">
                     {/*left button*/}
                     <button 
-                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30"
+                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30 dark:text-gray-300 hc:bg-yellow-500"
                         onClick={() => setcurrentImage(prev => prev - 1)}
-                        disabled={currentImage === 0}>
-                            <ChevronLeft className="w-6 h-6"/></button>
+                        disabled={currentImage === 0}
+                        aria-label="Previous image"
+                        >
+                        <ChevronLeft className="w-6 h-6 dark:text-gray-800 hc:text-black"/></button>
                     
                     <img 
                         src={property.images.sort((a, b) => a.position - b.position)[currentImage].path}
@@ -95,8 +97,9 @@ export default function IndividualListing({addFavourite}) {
                     <button
                         onClick={() => setcurrentImage(prev => prev + 1)}
                         disabled={currentImage === property.images.length - 1}
-                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30">
-                        <ChevronRight className="w-6 h-6" /></button>
+                        className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 disabled:opacity-30 dark:text-gray-300 hc:bg-yellow-500"
+                        aria-label="Next image">
+                        <ChevronRight className="w-6 h-6 dark:text-gray-800 hc:text-black" /></button>
                 
                 {/*error incase no images available*/}
                 </div>)
@@ -108,20 +111,20 @@ export default function IndividualListing({addFavourite}) {
                 {/*property info column*/}
                 <h2 className="text-2xl font-semibold mb-4">Property details:</h2>
 
-                    <div className = "flex justify-between gap-2 text-center bg-gray-50 rounded shadow-md p-4 mb-8 min-w-96">
+                    <div className = "flex justify-between gap-2 text-center bg-gray-50 rounded shadow-md p-4 mb-8 min-w-96 dark:bg-zinc-900 dark:shadow-gray-400 hc:bg-hc-bg hc:border border-hc-border">
                         <div className = "ml-5">
                             <House className="inline w-8 h-8 mb-1"/>
-                            <p className="text-gray-500 text-sm"> PROPERTY TYPE:</p>
+                            <p className="text-gray-500 text-sm dark:text-gray-300 hc:text-hc-text"> PROPERTY TYPE:</p>
                             <p className="text-lg">{propertyTypeReformat}</p>
                         </div>
                         <div>
                             <Bed className="inline w-8 h-8 mb-1"/>
-                            <p className="text-gray-500 text-sm">BEDROOMS:</p>
+                            <p className="text-gray-500 text-sm dark:text-gray-300 hc:text-hc-text">BEDROOMS:</p>
                             <p className="text-lg">{property.bedrooms}</p>
                         </div>
                         <div className = "mr-5">
                             <Bath className="inline w-8 h-8 mb-1"/>
-                            <p className="text-gray-500 text-sm">BATHROOMS:</p>
+                            <p className="text-gray-500 text-sm dark:text-gray-300 hc:text-hc-text">BATHROOMS:</p>
                             <p className="text-lg">{property.bathrooms}</p>
                         </div>
                     </div>
@@ -152,7 +155,7 @@ export default function IndividualListing({addFavourite}) {
                     </div>
 
                     {/*contact info*/}
-                    <div className="bg-blue-100 flex flex-col justify-center rounded-lg p-4 text-center">
+                    <div className="bg-blue-100 flex flex-col justify-center rounded-lg p-4 text-center dark:bg-slate-800 hc:bg-hc-bg hc:border border-hc-border">
                         <h2 className = "text-2xl font-semibold mb-2">Contact information</h2>
 
                         <div className = "text-center text-lg p-4">
@@ -178,7 +181,8 @@ export default function IndividualListing({addFavourite}) {
             <button 
             onClick={() => {addFavourite(property); setIsAdded(true);}}
             disabled = {isAdded}
-            className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500 disabled:hover:bg-red-400">
+            className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hc:bg-red-600 hover:bg-red-500 disabled:hover:bg-red-400">
+
                 <Heart className="inline w-5 h-5 mr-1"/>
                 {isAdded? "Added to favourites" : "Add to favourites!"}
             </button>

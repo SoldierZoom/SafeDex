@@ -5,7 +5,7 @@ import { getNeighbourhoodById } from '../../services/api/neighbourhoodApi';
 // Helper function to label score by color
 export function getSafetyColor(score) {
     if (score >= 70) return {color: "#1D9E75", label: "Safe", bg: "#E1F5EE"};
-    if (score >= 40) return { color: "#f1ce08", label: "Moderate", bg: "#FAEEDA" };
+    if (score >= 40) return { color: "#8e6a00", label: "Moderate", bg: "#FFF6CC" };
     return               { color: "#A32D2D", label: "High Risk",bg: "#FCEBEB" };
 }
 
@@ -93,7 +93,7 @@ export default function SafetyScorePage() {
             </div>
 
             {/* Overall safety score card */}
-            <div className="rounded-xl border p-4 mb-6 flex flex-wrap items-center gap-6">
+            <div className="rounded-xl border p-4 mb-6 flex flex-wrap items-center gap-6 dark:bg-slate-900 dark:border-slate-500 hc:border-hc-border ">
                 <div className="rounded-full flex items-center justify-center shrink-0" style={{ width: 80, height: 80, background: bg, border: `3px solid ${color}` }}>
                     <span style={{ color, fontSize: 24, fontWeight: 600 }}>
                         {neighbourhood.safetyScore}
@@ -111,7 +111,7 @@ export default function SafetyScorePage() {
             </div>
 
             { /* Crime breakdown bars */}
-            <div className="rounded-x1 border p-4 mb-6 overflow-hidden">
+            <div className="rounded-xl border p-4 mb-6 overflow-hidden dark:bg-slate-900 dark:border-slate-500 hc:border-hc-border">
                 <h2 className="text-base font-semibold mb-4">Crime breakdown - past year</h2>
                 <div className="space-y-3">
                     {categories.map((cat) => {
@@ -133,7 +133,7 @@ export default function SafetyScorePage() {
             </div>
 
             {/* Recent crimes list - latest month */}
-            <div className="rounded-xl border border-slate-200 p-4 mb-6 overflow-x-auto">
+            <div className="rounded-xl border border-slate-200 p-4 mb-6 overflow-x-auto dark:bg-slate-900 dark:border-slate-600 hc:border-hc-border">
                 <h2 className="text-base font-semibold mb-4">
                     Recent crimes — latest month
                     <span className="font-normal text-sm ml-2">
@@ -146,7 +146,7 @@ export default function SafetyScorePage() {
                         <div
                             key={crime.id}
                             tabIndex={0}
-                            className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100 focus:outline-2 focus:outline-blue-500"
+                            className="flex items-start gap-3 p-3 rounded-lg bg-slate-50 border border-slate-100 focus:outline-2 focus:outline-blue-500 dark:bg-slate-700 dark:border-slate-500 hc:bg-hc-bg hc:border-hc-border"
                         >
                             {/* colour dot matching crime type */}
                             <div

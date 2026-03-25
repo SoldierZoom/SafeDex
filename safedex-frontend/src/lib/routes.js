@@ -25,13 +25,13 @@ const routes = [
         icon: null,
     },
     {
-        name: 'Favourite',
+        name: 'Favourites',
         path: '/favourite',
         component: FavouritePage,
         icon: <Heart className="inline text-red-400" />,
     },
     {
-        name: 'Crime Heatmap',
+        name: 'Crime Map',
         path: '/heatmap',
         component: HeatmapPage,
         icon: null,

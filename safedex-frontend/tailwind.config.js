@@ -1,11 +1,26 @@
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        silkscreen: ['Silkscreen', 'cursive'],
+      },
+      colors: {
+        hc: {
+          bg: "#000000",
+          text: "#ffe066",
+          border: "#ffe066",
+          layer: "#111111",
+        }
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant('hc', '.high-contrast &')
+    },
+  ],
 }
 
 

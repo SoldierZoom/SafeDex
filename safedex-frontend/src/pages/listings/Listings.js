@@ -151,8 +151,8 @@ export default function Listings({addFavourite, favourites = [] }) {
     if (loading) {
         return (
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold mb-8">Property Listings</h1>
-                <div className="text-center">Loading properties...</div>
+                <h1 className="text-3xl font-bold mb-8 hc:text-hc-text">Property Listings</h1>
+                <div className="text-center hc:text-hc-text">Loading properties...</div>
             </div>
         );
     }
@@ -160,7 +160,7 @@ export default function Listings({addFavourite, favourites = [] }) {
     if (error) {
         return (
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold mb-8">Property Listings</h1>
+                <h1 className="text-3xl font-bold mb-8 hc:text-hc-text">Property Listings</h1>
                 <div className="text-center text-red-600">{error}</div>
             </div>
         );
@@ -168,13 +168,13 @@ export default function Listings({addFavourite, favourites = [] }) {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8">Property Listings</h1>
+            <h1 className="text-3xl font-bold mb-8 hc:text-hc-text">Property Listings</h1>
 
             {/* Filters */}
-            <div className="bg-gray-50 p-6 rounded-lg mb-8">
-                <h2 className="text-xl font-semibold mb-4">Filter Properties</h2>
+            <div className="bg-gray-50 p-6 rounded-lg mb-8 dark:bg-slate-800 dark:border dark:border-gray-600 hc:bg-zinc-900 hc:border hc:border-hc-border">
+                <h2 className="text-xl font-semibold mb-4 hc:text-hc-text">Filter Properties</h2>
                 <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                         Search by Postcode or Location
                     </label>
                     <input
@@ -183,12 +183,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                         value={filters.search}
                         onChange={handleFilterChange}
                         placeholder="e.g., SW1A or Baker Street or Downtown"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                        dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                        hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                     />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Min Price (£/month)
                         </label>
                         <input
@@ -197,12 +199,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.minPrice}
                             onChange={handleFilterChange}
                             placeholder="e.g., 500"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="0"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Max Price (£/month)
                         </label>
                         <input
@@ -211,12 +215,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.maxPrice}
                             onChange={handleFilterChange}
                             placeholder="e.g., 1500"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="0"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Min Bedrooms
                         </label>
                         <input
@@ -225,12 +231,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.minBedrooms}
                             onChange={handleFilterChange}
                             placeholder="e.g., 1"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="1"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Max Bedrooms
                         </label>
                         <input
@@ -239,12 +247,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.maxBedrooms}
                             onChange={handleFilterChange}
                             placeholder="e.g., 5"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="1"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Min Bathrooms
                         </label>
                         <input
@@ -253,12 +263,14 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.minBathrooms}
                             onChange={handleFilterChange}
                             placeholder="e.g., 1"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="1"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Max Bathrooms
                         </label>
                         <input
@@ -267,17 +279,19 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.maxBathrooms}
                             onChange={handleFilterChange}
                             placeholder="e.g., 3"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-50 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="1"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             House Type
                         </label>
                         <div className="space-y-1 mt-1">
                             {[{ value: 'DETACHED', label: 'Detached' }, { value: 'SEMI_DETACHED', label: 'Semi Detached' }, { value: 'FLAT', label: 'Flat' }, { value: 'TERRACED', label: 'Terraced' }].map(type => (
-                                <label key={type.value} className="flex items-center space-x-2 text-sm text-gray-700">
+                                <label key={type.value} className="flex items-center space-x-2 text-sm text-gray-700 dark:text-white hc:text-hc-text">
                                     <input
                                         type="checkbox"
                                         value={type.value}
@@ -291,7 +305,7 @@ export default function Listings({addFavourite, favourites = [] }) {
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Min Safety Score
                         </label>
                         <input
@@ -300,7 +314,9 @@ export default function Listings({addFavourite, favourites = [] }) {
                             value={filters.minSafetyScore}
                             onChange={handleFilterChange}
                             placeholder="e.g., 50"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 t-yellow-500 
+                            dark:bg-slate-700 dark:text-white dark:placeholder-gray-300
+                            hc:placeholder:text-yellow-500 hc:bg-hc-layer hc:text-hc-text hc:border-hc-border"
                             min="0"
                             max="100"
                         />
@@ -309,14 +325,15 @@ export default function Listings({addFavourite, favourites = [] }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Sort by
                         </label>
                         <select
                             name="sortBy"
                             value={sortBy}
                             onChange={handleSortChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-700 hc:text-gray-700"
+                            aria-label="Sort Filter"
                         >
                             <option value="price">Price</option>
                             <option value="safetyScore">Safety Score</option>
@@ -324,17 +341,18 @@ export default function Listings({addFavourite, favourites = [] }) {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-white hc:text-hc-text">
                             Sort direction
                         </label>
                         <select
                             name="sortOrder"
                             value={sortOrder}
                             onChange={handleSortChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-700 hc:text-gray-700"
+                            aria-label="Sort Direction"
                         >
-                            <option value="ASC">Ascending</option>
-                            <option value="DESC">Descending</option>
+                            <option value="ASC" >Ascending</option>
+                            <option value="DESC" >Descending</option>
                         </select>
                     </div>
                 </div>
@@ -356,34 +374,35 @@ export default function Listings({addFavourite, favourites = [] }) {
             </div>
 
             {/* Results count */}
-            <div className="mb-4 text-gray-600">
+            <div className="mb-4 text-gray-600 dark:text-white hc:text-hc-text">
                 Showing {properties.length} properties
             </div>
 
             {properties.length === 0 ? (
-                <div className="text-center text-gray-500">
+                <div className="text-center text-gray-500 dark:text-white hc:text-hc-text">
                     No properties match your filters.
                 </div>
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+
                         {properties.map((property) => {
                             //checks if property is in faves
                             const isAdded = favourites.some(f => f.id === property.id);
                             
                             return (
-                            <div key={property.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                            <div key={property.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border dark:border-gray-600 hc:bg-zinc-900 hc:border hc:border-hc-border hover:scale-105 transition-transform duration-100">
                                 <h2 className="text-xl font-semibold mb-2">{property.name}</h2>
-                                <div className="text-2xl font-bold text-green-600 mb-2">
+                                <div className="text-2xl font-bold text-green-600 mb-2 dark:text-green-400">
                                     £{property.ppm}/month
                                 </div>
                                 {property.neighbourhood && (
                                     <div className="mb-4">
-                                        <div className="text-sm text-gray-600">
+                                        <div className="text-sm text-gray-600 dark:text-white hc:text-hc-text">
                                             Neighbourhood: {property.neighbourhood.name}
                                         </div>
                                         <div className="flex items-center mt-1">
-                                            <span className="text-sm text-gray-600 mr-2">Safety Score:</span>
+                                            <span className="text-sm text-gray-600 mr-2 dark:text-white hc:text-hc-text">Safety Score:</span>
                                             <div className={`px-2 py-1 rounded text-xs font-medium ${
                                                 property.neighbourhood.safetyScore >= 80 ? 'bg-green-100 text-green-800' :
                                                 property.neighbourhood.safetyScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
@@ -392,7 +411,7 @@ export default function Listings({addFavourite, favourites = [] }) {
                                                 {property.neighbourhood.safetyScore}/100
                                             </div>
                                         </div>
-                                        <div className="text-sm text-gray-600 mt-1">
+                                        <div className="text-sm text-gray-600 mt-1 dark:text-white hc:text-hc-text">
                                             Population: {property.neighbourhood.population.toLocaleString()}
                                         </div>
                                     </div>

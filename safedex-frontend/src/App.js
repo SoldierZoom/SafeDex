@@ -1,8 +1,9 @@
-import "./App.css";
-import AppLayout from "./layout/Layout";
-import Content from "./Content";
-import React, { useState, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import './App.css'
+import AppLayout from './layout/Layout'
+import Content from './Content'
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { AccessibilityProvider } from './context/AccessibilityContext'
 
 export default function App() {
 
@@ -35,14 +36,16 @@ export default function App() {
   };
 
   return (
-      <BrowserRouter>
+    <BrowserRouter>
+      <AccessibilityProvider>
         <AppLayout>
           <Content 
           favourites = {favourites}
-         addFavourite = {addFavourite}
-         onDeleteFavourite = {deleteFavourite}
+          addFavourite = {addFavourite}
+          onDeleteFavourite = {deleteFavourite}
          />
         </AppLayout>
-      </BrowserRouter>
-  );
+      </AccessibilityProvider>
+    </BrowserRouter>
+  )
 }
