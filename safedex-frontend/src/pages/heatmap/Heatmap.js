@@ -19,6 +19,8 @@ import 'leaflet/dist/leaflet.css'
 import 'react-leaflet-cluster/dist/assets/MarkerCluster.css'
 import 'react-leaflet-cluster/dist/assets/MarkerCluster.Default.css'
 
+import { useAccessibility } from '../../context/AccessibilityContext.js'
+
 export default function Heatmap() {
     const [neighbourhoods, setNeighbourhoods] = useState([]);
     const [crimeOptions, setCrimeOptions] = useState({});
@@ -28,6 +30,8 @@ export default function Heatmap() {
     const [showNeighbourhood, setShowNeighbourhood] = useState(true);
     const [showCrimeTotal, setShowCrimeTotal] = useState(true);
     const [showHeatmap, setShowHeatmap] = useState(false);
+
+    const { darkMode, highContrast } = useAccessibility()
 
     useEffect(() => {
         function fetchNeighbourhoods() {
@@ -70,7 +74,7 @@ export default function Heatmap() {
     }, []);
 
     if (isLoading) {
-        return <h1>Loading...</h1>
+        return <h1 className = 'text-2xl text-center text-black dark:text-white hc:text-hc-text' >Loading...</h1>
     }
 
     function handleCrimeOptionsToggle(e) {
@@ -103,7 +107,7 @@ export default function Heatmap() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="mb-10 text-4xl font-bold">Crime Heatmap</h1>
+            <h2 className="mb-10 text-4xl font-bold">Crime Heatmap</h2>
             <div className="flex justify-center h-[80vh] w-full gap-3">
                 <div className="h-full min-w-max w-[25%] p-3 border-2 rounded-2xl overflow-y-scroll">
                     <label className="flex m-2 space-x-2 items-center">
@@ -114,20 +118,46 @@ export default function Heatmap() {
                     <div className="flex my-4 space-x-3">
                         <button
                             onClick={() => setShowNeighbourhood(p => !p)}
-                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showNeighbourhood)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
-                        >
+                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${
+                                showNeighbourhood
+                                ? 'text-blue-800 bg-blue-300 border-blue-900'
+                                : highContrast
+                                    ? 'text-hc-text border-hc-border bg-hc-bg'
+                                    : darkMode
+                                    ? 'text-gray-200 border-gray-200 bg-zinc-900'
+                                    : 'text-gray-500 border-gray-500 bg-white'
+                            }`}
+                            >
                             <House /> Neighbourhood
                         </button>
+
                         <button
                             onClick={() => setShowCrimeTotal(p => !p)}
-                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showCrimeTotal)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
-                        >
-                            <Cctv /> Total
+                                className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${
+                                    showCrimeTotal
+                                    ? 'text-blue-800 bg-blue-300 border-blue-900'
+                                    : highContrast
+                                        ? 'text-hc-text border-hc-border bg-hc-bg'
+                                        : darkMode
+                                        ? 'text-gray-200 border-gray-200 bg-zinc-900'
+                                        : 'text-gray-500 border-gray-500 bg-white'
+                                }`}
+                                >
+                                <Cctv /> Total
                         </button>
+
                         <button
                             onClick={() => setShowHeatmap(p => !p)}
-                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${(showHeatmap)? 'text-blue-800 bg-blue-300 border-blue-900' : 'text-gray-500 border-gray-500'}`}
-                        >
+                            className={`flex items-center gap-1 py-1 px-2 border-2 rounded-xl font-semibold ${
+                                showHeatmap
+                                ? 'text-blue-800 bg-blue-300 border-blue-900'
+                                : highContrast
+                                    ? 'text-hc-text border-hc-border bg-hc-bg'
+                                    : darkMode
+                                    ? 'text-gray-200 border-gray-200 bg-zinc-900'
+                                    : 'text-gray-500 border-gray-500 bg-white'
+                            }`}
+                            >
                             <Map /> Heatmap
                         </button>
                     </div>
@@ -137,9 +167,9 @@ export default function Heatmap() {
                                 key={i} 
                                 className="flex mx-1 px-2 text-xl"
                             >
-                                <label className="flex-grow font-semibold text-slate-600">{displayCrimeType(crime)}</label>
+                                <label className="flex-grow font-semibold text-slate-600 dark:text-white hc:text-hc-text">{displayCrimeType(crime)}</label>
                                 <div className="flex space-x-3 items-center">
-                                    <span className="px-3 bg-slate-300 rounded-3xl">{crimeOptions[crime].count}</span>
+                                    <span className="px-3 bg-slate-300 rounded-3xl dark:bg-slate-700 hc:bg-hc-bg hc:border border-hc-border">{crimeOptions[crime].count}</span>
                                     <input
                                         id={crime}
                                         name={crime}

@@ -34,7 +34,7 @@ export default function NavBar() {
   return (
     <nav
       aria-label="Main navigation"
-      className={`fixed top-0 left-0 w-full z-50 bg-black border-b border-white/10 hc:border-hc-border transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}
+      className={`fixed top-0 left-0 w-full z-[2000] bg-black border-b border-white/10 hc:border-hc-border transition-transform duration-300 ${show ? 'translate-y-0' : '-translate-y-full'}`}
     >
       <div className="px-8">
         <div className="flex items-center justify-between h-16">

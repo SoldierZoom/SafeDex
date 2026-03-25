@@ -1,4 +1,6 @@
 import { ReactTyped } from 'react-typed'
+import mapScreenshot from './assets/images/mapScreenshot.png'
+import listingPreview from './assets/images/listingPreview.png'
 
 const features = [
   {
@@ -72,9 +74,35 @@ export default function FeatureSection() {
               </dl>
             </div>
           </div>
-          {/* ADD SCREENSHOT HERE OR MAKE IT INTERACTIVE*/}
-          <div className="w-full h-96 bg-slate-100 flex items-center justify-center text-slate-400">
-            Map screenshot will be added here (maybe interactive preview)
+
+          {/* Preview Images */}
+          <div className="flex flex-col gap-4 w-full">
+            <div className="relative rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 border border-slate-200 dark:border-slate-700 hc:border-hc-border shadow-lg">
+              <img
+                src={listingPreview}
+                alt="SafeDex individual listing showing safety score"
+                className="w-full h-56 object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute bottom-3 left-3 bg-black/70 text-white font-mono text-xs px-3 py-1 rounded-full">
+                Safety Score
+              </div>
+            </div>
+            <div className="relative rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 border border-slate-200 dark:border-slate-700 hc:border-hc-border shadow-lg">
+              <img
+                src={mapScreenshot}
+                alt="SafeDex crime heatmap showing Birmingham crime data"
+                className="w-full h-56 object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute bottom-3 left-3 bg-black/70 text-white font-mono text-xs px-3 py-1 rounded-full">
+                Crime Heatmap
+              </div>
+            </div>
+            {/*add safety score breakdown and favourites here*/}
+            
+            <div className="flex justify-end">
+            </div>
           </div>
         </div>
       </div>

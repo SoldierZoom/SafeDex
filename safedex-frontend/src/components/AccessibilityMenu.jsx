@@ -7,7 +7,7 @@ export default function AccessibilityMenu() {
   const { textSize, setTextSize, darkMode, highContrast, enableDarkMode, disableDarkMode, enableHighContrast, disableHighContrast } = useAccessibility()
 
   return (
-    <div className='fixed bottom-6 right-6 z-50'>
+    <div className='fixed bottom-6 right-6 z-[2000]'>
       {isOpen ? (
         <div className={`w-72 border rounded-2xl shadow-2xl ${
             highContrast ? 'bg-hc-bg border-hc-border' :
