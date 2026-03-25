@@ -2,6 +2,7 @@ package com.logicluminaries.safedex.service;
 
 import com.logicluminaries.safedex.enums.HouseType;
 import com.logicluminaries.safedex.enums.OrderType;
+import com.logicluminaries.safedex.enums.SortType;
 import com.logicluminaries.safedex.model.PagedProperties;
 import com.logicluminaries.safedex.model.Property;
 import com.logicluminaries.safedex.repository.PropertyRepository;
@@ -38,12 +39,28 @@ public class PropertyService {
     }*/
 
     //gets page of filtered entries
-    public PagedProperties getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, String sortBy, OrderType order) {
+    public PagedProperties getPage(int pageNum, String query, Integer minPrice, Integer maxPrice, Integer minSafetyScore, Integer minBedroom, Integer maxBedroom, Integer minBathroom, Integer maxBathroom, List<HouseType> types, SortType sortBy, OrderType order) {
+        //validate min max fields
+        if(minPrice!=null&maxPrice!=null) {
+            if(minPrice>maxPrice) {
+                throw new IllegalArgumentException();
+            }
+        }
+        if(minBedroom!=null&maxBedroom!=null) {
+            if(minBedroom>maxBedroom) {
+                throw new IllegalArgumentException();
+            }
+        }
+        if(minBathroom!=null&maxBathroom!=null) {
+            if(minBathroom>maxBathroom) {
+                throw new IllegalArgumentException();
+            }
+        }
         //adjust sortBy fields
         String actualSortField;
-        if (sortBy.equals("safetyScore")) {
+        if (sortBy.toString().equals("safetyScore")) {
             actualSortField = "neighbourhood.safetyScore";
-        } else if (sortBy.equals("date")) {
+        } else if (sortBy.toString().equals("date")) {
             actualSortField = "id";
         } else {
             actualSortField = "ppm";

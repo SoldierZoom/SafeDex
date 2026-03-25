@@ -51,4 +51,14 @@ public class Property {
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Property)) return false;
+        Property that = (Property) o;
+
+        // Only compare if both IDs are non-null
+        return id != null && id.equals(that.id);
+    }
 }
