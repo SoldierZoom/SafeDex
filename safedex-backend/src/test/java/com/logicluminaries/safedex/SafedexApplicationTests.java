@@ -181,9 +181,9 @@ class SafedexApplicationTests {
 					}
 				}
 			}
-			System.out.println("Price filter - test passed!");
+			System.out.println("Test: minPrice=650&maxPrice=1000 - test passed!");
 		} catch (AssertionError e) {
-			System.out.println("Price filter - test failed!");
+			System.out.println("Test: minPrice=650&maxPrice=1000 - test failed!");
 			throw e;
 		}
 	}
@@ -201,9 +201,9 @@ class SafedexApplicationTests {
 					}
 				}
 			}
-			System.out.println("Bedroom filter - test passed!");
+			System.out.println("Test: minBedrooms=3&maxBedrooms=4 - test passed!");
 		} catch (AssertionError e) {
-			System.out.println("Bedroom filter - test failed!");
+			System.out.println("Test: minBedrooms=3&maxBedrooms=4 - test failed!");
 			throw e;
 		}
 	}
@@ -221,9 +221,9 @@ class SafedexApplicationTests {
 					}
 				}
 			}
-			System.out.println("Bathroom filter - test passed!");
+			System.out.println("Test: minBathrooms=2&maxBathrooms=3 - test passed!");
 		} catch (AssertionError e) {
-			System.out.println("Bathroom filter - test failed!");
+			System.out.println("Test: minBathrooms=2&maxBathrooms=3 - test failed!");
 			throw e;
 		}
 	}
@@ -241,9 +241,9 @@ class SafedexApplicationTests {
 					}
 				}
 			}
-			System.out.println("SafetyScore filter - test passed!");
+			System.out.println("Test: minSafetyScore=50 - test passed!");
 		} catch (AssertionError e) {
-			System.out.println("SafetyScore filter - test failed!");
+			System.out.println("Test: minSafetyScore=50 - test failed!");
 			throw e;
 		}
 	}
@@ -332,9 +332,9 @@ class SafedexApplicationTests {
 		Collections.sort(expectedIds);
 		Collections.sort(response);
 		if(expectedIds.equals(response)) {
-			System.out.println("Expected ids: "+expectedIds+" Got: "+response+" - test passed!");
+			System.out.println("Query = \"no\", Expected ids: "+expectedIds+" Got: "+response+" - test passed!");
 		} else {
-			System.out.println("Expected ids: "+expectedIds+" Got: "+response+" - test failed!");
+			System.out.println("Query = \"no\", Expected ids: "+expectedIds+" Got: "+response+" - test failed!");
 		}
 
 
@@ -347,9 +347,9 @@ class SafedexApplicationTests {
 					throw new AssertionError();
 				}
 			}
-			System.out.println("All properties in selly oak - test passed!");
+			System.out.println("Query = \"SeLly OAK\", All properties in selly oak - test passed!");
 		} catch (AssertionError e) {
-			System.out.println("Not all properties in selly oak - test failed!");
+			System.out.println("Query = \"SeLly OAK\", Not all properties in selly oak - test failed!");
 			throw e;
 		}
 
@@ -359,42 +359,42 @@ class SafedexApplicationTests {
 		response.clear();
 		response = testQuery("North Road Selly Oak B29 6TL");
 		if(expectedIds.equals(response)) {
-			System.out.println("Expected id: 23 Got: "+response+" - test passed!");
+			System.out.println("Query = \"North Road Selly Oak B29 6TL\", Expected id: 23 Got: "+response+" - test passed!");
 		} else {
-			System.out.println("Expected id: 23 Got: "+response+" - test failed!");
+			System.out.println("Query = \"North Road Selly Oak B29 6TL\", Expected id: 23 Got: "+response+" - test failed!");
 		}
 
 		//no match
 		response.clear();
 		response = testQuery("zyhuji");
 		if(response.equals(Collections.EMPTY_LIST)) {
-			System.out.println("Got empty list - test passed!");
+			System.out.println("Query = \"zyhuji\", Got empty list - test passed!");
 		} else {
-			System.out.println("Expected no id Got: "+response+" - test failed!");
+			System.out.println("Query = \"zyhuji\", Expected no id Got: "+response+" - test failed!");
 		}
 		//no match - special chars
 		response.clear();
 		response = testQuery("£$%^&*");
 		if(response.equals(Collections.EMPTY_LIST)) {
-			System.out.println("Got empty list - test passed!");
+			System.out.println("Query = \"£$%^&*\", Got empty list - test passed!");
 		} else {
-			System.out.println("Expected no id Got: "+response+" - test failed!");
+			System.out.println("Query = \"£$%^&*\", Expected no id Got: "+response+" - test failed!");
 		}
 		//empty query
 		response.clear();
 		response=testQuery("");
 		if (!response.equals(Collections.EMPTY_LIST)) {
-			System.out.println("Did not get empty response - test passed!");
+			System.out.println("Query = \"\", Did not get empty response - test passed!");
 		} else {
-			System.out.println("Empty response - test failed!");
+			System.out.println("Query = \"\", Empty response - test failed!");
 		}
 		//only spaces
 		response.clear();
 		response=testQuery("     ");
 		if (!response.equals(Collections.EMPTY_LIST)) {
-			System.out.println("Did not get empty response - test passed!");
+			System.out.println("Query = \"     \", Did not get empty response - test passed!");
 		} else {
-			System.out.println("Empty response - test failed!");
+			System.out.println("Query = \"     \", Empty response - test failed!");
 		}
 
 	}
