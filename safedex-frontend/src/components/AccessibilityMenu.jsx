@@ -75,8 +75,6 @@ export default function AccessibilityMenu() {
                 </button>
             </div>
 
-
-            {/* Text Size */}
             <p className={`font-mono text-sm mb-3 mt-4 text-center ${
                 highContrast ? 'text-hc-text' :
                 darkMode ? 'text-white' : 'text-slate-900'}`}>

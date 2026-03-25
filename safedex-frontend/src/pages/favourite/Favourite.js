@@ -8,8 +8,8 @@ export default function FavouritePage({ favourites = [], onDeleteFavourite}) {
     if (!favourites || favourites.length === 0) {
         return (
             <div className="container mx-auto px-4 py-16 text-center">
-                <h1 className="text-4xl font-bold mb-6">Your Favourites </h1>
-                <p className="text-gray-500">
+                <h1 className="text-4xl font-bold mb-6 dark:text-white">Your Favourites </h1>
+                <p className="text-gray-500 dark:text-slate-200 hc:text-hc-text">
                     You haven't added any properties to your favourites yet.
                 </p>
             </div>
@@ -31,7 +31,7 @@ export default function FavouritePage({ favourites = [], onDeleteFavourite}) {
                     .sort((a, b) => a.position - b.position)[0];
                     return (
                         <button key={property.id} 
-                            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer dark:bg-slate-900 dark:border dark:border-gray-600 hc:border hc:border-yellow-300 hc:bg-zinc-800 hover:scale-105 transition-transform duration-100"
                             onClick={() => navigate(`/listings/${property.id}`)}
                     >
     
@@ -52,7 +52,7 @@ export default function FavouritePage({ favourites = [], onDeleteFavourite}) {
                             £{property.ppm}/month
                         </div>
                         {property.neighbourhood && (
-                            <div className="mb-4 text-sm text-gray-600">
+                            <div className="mb-4 text-sm text-gray-600 dark:text-white hc:text-hc-text">
                                 <p>Neighbourhood: {property.neighbourhood.name}</p>
                                 <p>
                                     Safety Score: 
