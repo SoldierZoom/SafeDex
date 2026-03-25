@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { House, Bed, Bath, PhoneCall, Mail, Heart,TriangleAlert , ArrowBigRight, ChevronLeft, ChevronRight} from 'lucide-react';
 import {formatPropertyType, getSafetyScoreColour} from './IndividualListingsUtils'
 
-export default function IndividualListing() {
+export default function IndividualListing({addFavourite}) {
     const {id} = useParams();
     const [property, setProperty] = useState(null);
     //for loading screen
@@ -172,7 +172,9 @@ export default function IndividualListing() {
             <div className = "flex justify-between">
             
             {/*favourites and back buttons*/}
-            <button className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500">
+            <button 
+            onClick={() => addFavourite(property)} 
+            className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500">
                 <Heart className="inline w-5 h-5 mr-1"/>
                 Add to favourites!
             </button>

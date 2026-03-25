@@ -23,7 +23,6 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider>
       <BrowserRouter>
         <AppLayout>
           <Content 
@@ -33,6 +32,5 @@ export default function App() {
          />
         </AppLayout>
       </BrowserRouter>
-    </ThemeProvider>
   );
 }
