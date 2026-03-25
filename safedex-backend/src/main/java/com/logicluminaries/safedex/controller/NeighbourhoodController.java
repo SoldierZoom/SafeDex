@@ -1,6 +1,5 @@
 package com.logicluminaries.safedex.controller;
 
-import com.logicluminaries.safedex.model.CrimeRecord;
 import com.logicluminaries.safedex.model.Neighbourhood;
 import com.logicluminaries.safedex.service.NeighbourhoodService;
 import jakarta.validation.Valid;
