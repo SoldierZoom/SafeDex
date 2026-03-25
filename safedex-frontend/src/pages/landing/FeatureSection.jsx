@@ -1,6 +1,7 @@
 import { ReactTyped } from 'react-typed'
 import mapScreenshot from './assets/images/mapScreenshot.png'
 import listingPreview from './assets/images/listingPreview.png'
+import scoreBreakdown from './assets/images/scoreBreakdown.png'
 
 const features = [
   {
@@ -12,7 +13,7 @@ const features = [
         href="https://data.police.uk" 
         target="_blank" 
         rel="noreferrer"
-        className="font-medium text-blue-700 hover:underline"
+        className="font-medium text-blue-800 dark:text-blue-400 hover:underline"
       >
         data.police.uk
       </a>
@@ -99,8 +100,18 @@ export default function FeatureSection() {
                 Crime Heatmap
               </div>
             </div>
-            {/*add safety score breakdown and favourites here*/}
-            
+            {/*add safety score breakdown*/}
+            <div className="relative rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 border border-slate-200 dark:border-slate-700 hc:border-hc-border shadow-lg">
+              <img
+                src={scoreBreakdown}
+                alt="SafeDex crime heatmap showing Birmingham crime data"
+                className="w-full h-56 object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <div className="absolute bottom-3 left-3 bg-black/70 text-white font-mono text-xs px-3 py-1 rounded-full">
+                Safety Score Breakdown
+              </div>
+            </div>
             <div className="flex justify-end">
             </div>
           </div>
