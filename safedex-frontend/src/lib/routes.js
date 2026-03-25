@@ -9,8 +9,6 @@ import {
 import {
     Home,
     Heart,
-    List,
-    Map,
 } from 'lucide-react';
 
 const routes = [
@@ -24,7 +22,7 @@ const routes = [
         name: 'Listings',
         path: '/listings',
         component: <ListingsPage />,
-        icon: <List className="inline text-slate-700" />,
+        icon: null,
     },
     {
         name: 'Favourite',
@@ -36,7 +34,7 @@ const routes = [
         name: 'Crime Heatmap',
         path: '/heatmap',
         component: <HeatmapPage />,
-        icon: <Map className="inline text-slate-700" />,
+        icon: null,
     },
     {
         name: null,
