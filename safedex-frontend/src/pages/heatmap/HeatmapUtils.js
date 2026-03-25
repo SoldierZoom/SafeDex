@@ -12,7 +12,7 @@ export function displayCrimeType(crimeType) {
     const crimeTypeDisplayName = {
         "shoplifting": "Shoplifting",
         "bicycle-theft": "Bicycle Theft",
-        "anti-social-behaviour": "Anti Social Behavior",
+        "anti-social-behaviour": "Anti Social Behaviour",
         "drugs": "Drugs",
         "theft-from-the-person": "Theft from the person",
         "robbery": "Robbery",
