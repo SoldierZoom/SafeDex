@@ -15,31 +15,31 @@ const routes = [
     {
         name: 'Home',
         path: '/',
-        component: <LandingPage />,
+        component: LandingPage,
         icon: <Home className="inline text-slate-700" />,
     },
     {
         name: 'Listings',
         path: '/listings',
-        component: <ListingsPage />,
+        component: ListingsPage,
         icon: null,
     },
     {
         name: 'Favourite',
         path: '/favourite',
-        component: <FavouritePage />,
+        component: FavouritePage,
         icon: <Heart className="inline text-red-400" />,
     },
     {
         name: 'Crime Heatmap',
         path: '/heatmap',
-        component: <HeatmapPage />,
+        component: HeatmapPage,
         icon: null,
     },
     {
         name: null,
         path: '/listings/:id',
-        component: <IndividualListingPage />,
+        component: IndividualListingPage,
         icon: null,
     },
 ];
