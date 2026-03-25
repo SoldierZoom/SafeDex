@@ -1,60 +1,84 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { getPropertiesPage } from '../../services/api/propertyAPI';
 
 export default function Listings() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [properties, setProperties] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [filters, setFilters] = useState({
-        minPrice: '',
-        maxPrice: '',
-        minBedrooms: '',
-        maxBedrooms: '',
-        minBathrooms: '',
-        maxBathrooms: '',
-        houseType: [],
-        minSafetyScore: '',
-        search: ''
-    });
-    const [sortBy, setSortBy] = useState('price');
-    const [sortOrder, setSortOrder] = useState('ASC');
+    const [currentPage, setCurrentPage] = useState(() => parseInt(searchParams.get('page')) || 1);
+    const [filters, setFilters] = useState(() => ({
+        minPrice: searchParams.get('minPrice') || '',
+        maxPrice: searchParams.get('maxPrice') || '',
+        minBedrooms: searchParams.get('minBedrooms') || '',
+        maxBedrooms: searchParams.get('maxBedrooms') || '',
+        minBathrooms: searchParams.get('minBathrooms') || '',
+        maxBathrooms: searchParams.get('maxBathrooms') || '',
+        houseType: searchParams.get('types') ? searchParams.get('types').split(',') : [],
+        minSafetyScore: searchParams.get('minSafetyScore') || '',
+        search: searchParams.get('search') || ''
+    }));
+    const [sortBy, setSortBy] = useState(() => searchParams.get('sortBy') || 'price');
+    const [sortOrder, setSortOrder] = useState(() => searchParams.get('sortOrder') || 'ASC');
 
-    const navigate = useNavigate();
-
+    // Sync state from URL and fetch whenever URL params change (including browser back/forward)
     useEffect(() => {
-        fetchProperties();
-    }, [currentPage, filters, sortBy, sortOrder]);
+        const params = new URLSearchParams(location.search);
+        const page = parseInt(params.get('page')) || 1;
+        const urlFilters = {
+            search: params.get('search') || '',
+            minPrice: params.get('minPrice') || '',
+            maxPrice: params.get('maxPrice') || '',
+            minBedrooms: params.get('minBedrooms') || '',
+            maxBedrooms: params.get('maxBedrooms') || '',
+            minBathrooms: params.get('minBathrooms') || '',
+            maxBathrooms: params.get('maxBathrooms') || '',
+            houseType: params.get('types') ? params.get('types').split(',') : [],
+            minSafetyScore: params.get('minSafetyScore') || '',
+        };
+        const urlSortBy = params.get('sortBy') || 'price';
+        const urlSortOrder = params.get('sortOrder') || 'ASC';
 
-    const fetchProperties = async () => {
-        try {
-            setLoading(true);
-            const data = await getPropertiesPage(
-                currentPage,
-                filters.search || null,
-                filters.minPrice ? parseInt(filters.minPrice) : null,
-                filters.maxPrice ? parseInt(filters.maxPrice) : null,
-                filters.minSafetyScore ? parseInt(filters.minSafetyScore) : null,
-                filters.minBedrooms ? parseInt(filters.minBedrooms) : null,
-                filters.maxBedrooms ? parseInt(filters.maxBedrooms) : null,
-                filters.minBathrooms ? parseInt(filters.minBathrooms) : null,
-                filters.maxBathrooms ? parseInt(filters.maxBathrooms) : null,
-                filters.houseType.length > 0 ? filters.houseType : null,
-                sortBy,
-                sortOrder
-            );
-            setProperties(data.properties || data);
-            setTotalPages(data.totalPages || 1);
-            setError(null);
-        } catch (err) {
-            setError('Failed to load properties');
-            console.error('Error fetching properties:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
+        setCurrentPage(page);
+        setFilters(urlFilters);
+        setSortBy(urlSortBy);
+        setSortOrder(urlSortOrder);
+
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const data = await getPropertiesPage(
+                    page,
+                    urlFilters.search || null,
+                    urlFilters.minPrice ? parseInt(urlFilters.minPrice) : null,
+                    urlFilters.maxPrice ? parseInt(urlFilters.maxPrice) : null,
+                    urlFilters.minSafetyScore ? parseInt(urlFilters.minSafetyScore) : null,
+                    urlFilters.minBedrooms ? parseInt(urlFilters.minBedrooms) : null,
+                    urlFilters.maxBedrooms ? parseInt(urlFilters.maxBedrooms) : null,
+                    urlFilters.minBathrooms ? parseInt(urlFilters.minBathrooms) : null,
+                    urlFilters.maxBathrooms ? parseInt(urlFilters.maxBathrooms) : null,
+                    urlFilters.houseType.length > 0 ? urlFilters.houseType : null,
+                    urlSortBy,
+                    urlSortOrder
+                );
+                setProperties(data.properties || data);
+                setTotalPages(data.totalPages || 1);
+                setError(null);
+            } catch (err) {
+                setError('Failed to load properties');
+                console.error('Error fetching properties:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.search]);
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
@@ -62,7 +86,6 @@ export default function Listings() {
             ...prev,
             [name]: value
         }));
-        setCurrentPage(1);
     };
 
     const handleHouseTypeChange = (e) => {
@@ -73,7 +96,6 @@ export default function Listings() {
                 ? [...prev.houseType, value]
                 : prev.houseType.filter(t => t !== value)
         }));
-        setCurrentPage(1);
     };
 
     const handleSortChange = (e) => {
@@ -84,33 +106,45 @@ export default function Listings() {
         if (name === 'sortOrder') {
             setSortOrder(value);
         }
-        setCurrentPage(1);
+    };
+
+    const applyFilters = () => {
+        const params = new URLSearchParams();
+        if (filters.search) params.set('search', filters.search);
+        if (filters.minPrice) params.set('minPrice', filters.minPrice);
+        if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+        if (filters.minBedrooms) params.set('minBedrooms', filters.minBedrooms);
+        if (filters.maxBedrooms) params.set('maxBedrooms', filters.maxBedrooms);
+        if (filters.minBathrooms) params.set('minBathrooms', filters.minBathrooms);
+        if (filters.maxBathrooms) params.set('maxBathrooms', filters.maxBathrooms);
+        if (filters.houseType.length > 0) params.set('types', filters.houseType.join(','));
+        if (filters.minSafetyScore) params.set('minSafetyScore', filters.minSafetyScore);
+        if (sortBy !== 'price') params.set('sortBy', sortBy);
+        if (sortOrder !== 'ASC') params.set('sortOrder', sortOrder);
+        setSearchParams(params);
     };
 
     const clearFilters = () => {
-        setFilters({
-            minPrice: '',
-            maxPrice: '',
-            minBedrooms: '',
-            maxBedrooms: '',
-            minBathrooms: '',
-            maxBathrooms: '',
-            houseType: [],
-            minSafetyScore: '',
-            search: ''
-        });
-        setCurrentPage(1);
+        setSearchParams({});
     };
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
-            setCurrentPage(prev => prev + 1);
+            const params = new URLSearchParams(searchParams);
+            params.set('page', String(currentPage + 1));
+            setSearchParams(params);
         }
     };
 
     const handlePrevPage = () => {
         if (currentPage > 1) {
-            setCurrentPage(prev => prev - 1);
+            const params = new URLSearchParams(searchParams);
+            if (currentPage - 1 <= 1) {
+                params.delete('page');
+            } else {
+                params.set('page', String(currentPage - 1));
+            }
+            setSearchParams(params);
         }
     };
 
@@ -305,7 +339,13 @@ export default function Listings() {
                     </div>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex space-x-3">
+                    <button
+                        onClick={applyFilters}
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    >
+                        Search Properties
+                    </button>
                     <button
                         onClick={clearFilters}
                         className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
