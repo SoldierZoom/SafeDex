@@ -13,6 +13,9 @@ export default function IndividualListing({addFavourite}) {
     const [loading, setLoading] = useState(true);
     //for switching between the images
     const [currentImage, setcurrentImage] = useState(0);
+    //for tracking what has been added to faves
+    const [isAdded, setIsAdded] = useState(false);
+
     
         //fetches current listing based on id in the URL
         useEffect(() => {
@@ -175,12 +178,13 @@ export default function IndividualListing({addFavourite}) {
             <div className = "flex justify-between">
             
             {/*favourites and back buttons*/}
+            <button 
+            onClick={() => {addFavourite(property); setIsAdded(true);}}
+            disabled = {isAdded}
+            className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hc:bg-red-600 hover:bg-red-500 disabled:hover:bg-red-400">
 
-            <button
-                onClick={() => addFavourite(property)} 
-                className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500 hc:bg-red-600">
                 <Heart className="inline w-5 h-5 mr-1"/>
-                Add to favourites!
+                {isAdded? "Added to favourites" : "Add to favourites!"}
             </button>
 
             <button

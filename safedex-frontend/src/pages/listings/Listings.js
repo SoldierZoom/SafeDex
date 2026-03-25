@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { getPropertiesPage } from '../../services/api/propertyAPI';
 
-export default function Listings() {
+export default function Listings({addFavourite, favourites = [] }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
     const navigate = useNavigate();
@@ -385,9 +385,14 @@ export default function Listings() {
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        {properties.map((property) => (
+
+                        {properties.map((property) => {
+                            //checks if property is in faves
+                            const isAdded = favourites.some(f => f.id === property.id);
+                            
+                            return (
                             <div key={property.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow dark:bg-slate-800 dark:border dark:border-gray-600 hc:bg-zinc-900 hc:border hc:border-hc-border hover:scale-105 transition-transform duration-100">
-                                <h2 className="text-xl font-semibold mb-2 ">{property.name}</h2>
+                                <h2 className="text-xl font-semibold mb-2">{property.name}</h2>
                                 <div className="text-2xl font-bold text-green-600 mb-2 dark:text-green-400">
                                     £{property.ppm}/month
                                 </div>
@@ -418,12 +423,16 @@ export default function Listings() {
                                     >
                                         View Details
                                     </button>
-                                    <button className="px-3 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
-                                        ❤️
+                                    <button 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        addFavourite(property);}}
+                                    className="px-3 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                                        {isAdded ? "❤️" : "🩶"}
                                     </button>
                                 </div>
                             </div>
-                        ))}
+                        );})}
                     </div>
 
                     {/* Pagination */}
