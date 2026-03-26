@@ -21,4 +21,5 @@ PS C:\...\LogicLuminaries\safedexdb> psql -U postgres -d safedexdb -f safedex_du
 PS C:\...\LogicLuminaries\safedex-frontend> npm install
 PS C:\...\LogicLuminaries\safedex-frontend> npm start
 ```
+Note: When testing setting up the project I got some leaflet errors so you may want to also run `npm install leaflet`
 ## All done!
