@@ -181,7 +181,7 @@ export default function IndividualListing({addFavourite}) {
             <button 
             onClick={() => {addFavourite(property); setIsAdded(true);}}
             disabled = {isAdded}
-            className="mt-5 text-lg bg-red-400 text-white font-semibold px-4 py-2 rounded-lg hc:bg-red-600 hover:bg-red-500 disabled:hover:bg-red-400">
+            className="mt-5 text-lg bg-red-600 text-white font-semibold px-4 py-2 rounded-lg hc:bg-red-700 hover:bg-red-700 disabled:hover:bg-red-600">
 
                 <Heart className="inline w-5 h-5 mr-1"/>
                 {isAdded? "Added to favourites" : "Add to favourites!"}

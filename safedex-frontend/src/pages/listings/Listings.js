@@ -445,7 +445,7 @@ export default function Listings({addFavourite, favourites = [] }) {
                             >
                                 Previous
                             </button>
-                            <span className="px-4 py-2 text-gray-700">
+                            <span className="px-4 py-2 text-gray-700 dark:text-gray-400 hc:text-hc-text">
                                 Page {currentPage} of {totalPages}
                             </span>
                             <button
